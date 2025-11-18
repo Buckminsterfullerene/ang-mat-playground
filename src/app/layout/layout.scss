@@ -1,0 +1,70 @@
+:host {
+  --line-clr: #42434a;
+  --base-clr: #11121a;
+  /* Define default variable fallbacks if needed, matching the initial signal values */
+  --left-sidebar-width: 250px;
+  --right-sidebar-width: 250px;
+}
+
+.grid-container {
+  display: grid;
+  /* Three columns: Left, Content (1fr), Right */
+  grid-template-columns: var(--left-sidebar-width, 250px) 1fr var(--right-sidebar-width, 250px);
+  /* Two rows: header and main content/sidebars area */
+  grid-template-rows: auto 1fr;
+  /* Assign names to grid areas for easier placement (3 columns wide) */
+  grid-template-areas:
+    "header header header"
+    "left-sidebar content right-sidebar";
+
+  min-height: 100vh;
+  /* Transition applies to both dynamic widths now */
+  transition: grid-template-columns 300ms ease-in-out;
+}
+
+.header-container {
+  grid-area: header;
+  background-color: lightblue;
+}
+
+.left-sidebar-container {
+  /* Assign to the specific left area name */
+  grid-area: left-sidebar;
+  border-right: 1px solid var(--line-clr);
+  background-color: var(--base-clr);
+}
+
+.right-sidebar-container {
+  /* Assign to the specific right area name */
+  grid-area: right-sidebar;
+  /* Border is now on the left side of the right container */
+  border-left: 1px solid var(--line-clr);
+  background-color: var(--base-clr);
+}
+
+.content {
+  grid-area: content;
+  padding: 1rem;
+}
+
+@media (max-width: 800px) {
+  .grid-container {
+    /* Small Viewport: Content takes up 100% width, sidebars have 0 width */
+    grid-template-columns: 0 1fr 0;
+
+    /* Redefine grid areas so header and content span all columns */
+    grid-template-areas:
+      "header header header"
+      ". content ."; /* Sidebars are effectively hidden as they have no column width */
+  }
+
+  /* Optional: Ensure the sidebar containers themselves do not take up space or show borders/backgrounds */
+  .left-sidebar-container,
+  .right-sidebar-container {
+    display: contents; /* Makes children (your components) flow into the content area, or hides them if they have their own media queries */
+    /* Alternatively, you can use visibility: hidden; if display: contents causes issues with child component media queries */
+  }
+
+  /* The left-sidebar component's internal media query handles moving its menu to the bottom fixed position */
+  /* The right-sidebar component's internal media query already hides it (based on your description) */
+}

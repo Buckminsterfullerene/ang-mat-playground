@@ -1,0 +1,16 @@
+<header class="header-container">
+  <div class="logo">MyApp</div>
+
+  <!-- Wrap the navigation links for targeted hiding in CSS -->
+  <div class="desktop-nav-wrapper">
+    <header-nav-items [context]="{ displayMode: 'row' }"/>
+  </div>
+
+  <!-- Mobile Menu Button - hidden by default, shown in mobile CSS -->
+  <button mat-mini-fab
+          aria-label="Open menu"
+          class="menu-toggle-button"
+          (click)="toggleDrawer()">
+    <mat-icon class="material-symbols-outlined" aria-hidden="true">menu</mat-icon>
+  </button>
+</header>

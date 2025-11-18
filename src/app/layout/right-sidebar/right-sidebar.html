@@ -1,0 +1,67 @@
+<aside>
+  <!-- Keep the 'sidebar' class for shared styling, but maybe add 'right-aligned' if needed -->
+  <nav class="sidebar" [class.close]="!isSidebarOpen()">
+    <ul>
+      <li>
+        @if (isSidebarOpen()) {
+          <span class="logo">Right Menu</span>
+        }
+        <!-- Bind click event to the toggle method -->
+        <!-- Note the [class.rotate] logic is reversed for the right-aligned button -->
+        <button (click)="toggleSidebar()" class="toggle-btn" [class.rotate]="isSidebarOpen()">
+          <!-- Icon choice reversed from left-sidebar for visual consistency -->
+          <mat-icon aria-hidden="true" class="material-symbols-outlined" fontIcon="keyboard_double_arrow_right"></mat-icon>
+        </button>
+      </li>
+
+      <!-- Loop through all navigation items -->
+      @for (item of navItems; track item.label) {
+        <li>
+          <!-- links -->
+          @if (item.link) {
+            <a [routerLink]="item.link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+              <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="item.icon" aria-label="{{ item.label }} icon" />
+              <!-- Show link text if sidebar is open -->
+              @if (isSidebarOpen()) {
+                <span>{{ item.label }}</span>
+              }
+            </a>
+          }
+
+          <!-- items with sub-menus (dropdowns) -->
+          @if (item.subItems) {
+            <button (click)="toggleSubMenu(item)" class="dropdown-btn" [class.rotate]="isSubMenuOpen(item.label)">
+              <!-- Main icon for the parent dropdown item -->
+              <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="item.icon" aria-label="{{ item.label }} icon" />
+              <!-- Show link text if sidebar is open -->
+              @if (isSidebarOpen()) {
+                <span>{{ item.label }}</span>
+              }
+              <!-- Dropdown arrow icon (rotate handles the arrow direction) -->
+              <mat-icon aria-hidden="true" class="material-symbols-outlined" fontIcon="keyboard_arrow_down" aria-label="Toggle Submenu"></mat-icon>
+            </button>
+
+            <!-- Sub-menu container with dynamic class for 'show'/'hide' state -->
+            <ul class="sub-menu" [class.show]="isSubMenuOpen(item.label)">
+              <div>
+                <!-- Loop through sub-menu items -->
+                @for (subItem of item.subItems; track subItem.label) {
+                  <li class="sub-item">
+                    <a [routerLink]="subItem.link" routerLinkActive="active">
+                      <!-- Sub-item icons are optional but good practice -->
+                      <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="subItem.icon" aria-label="{{ subItem.label }} icon" />
+                      <!-- Show link text if sidebar is open -->
+                      @if (isSidebarOpen()) {
+                        <span>{{ subItem.label }}</span>
+                      }
+                    </a>
+                  </li>
+                }
+              </div>
+            </ul>
+          }
+        </li>
+      }
+    </ul>
+  </nav>
+</aside>

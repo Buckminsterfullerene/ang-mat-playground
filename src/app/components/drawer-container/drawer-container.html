@@ -1,0 +1,30 @@
+@if (isOpen()) {
+  <div class="drawer-overlay" (click)="closeDrawer()"></div>
+
+  <div #drawerContainerElement
+       class="drawer-container"
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="drawer-title"
+       tabindex="-1"
+       cdkTrapFocus
+       [cdkTrapFocusAutoCapture]="true">
+
+    <div class="drawer-content">
+      <div class="drawer-header">
+        @if (!getConfig()?.hideTitle) {
+          <h2 id="drawer-title">
+            <!-- Call the public getConfig method here -->
+            {{ getConfig()?.title }}
+          </h2>
+        }
+        <button mat-icon-button (click)="closeDrawer()" aria-label="Close drawer">
+          <mat-icon aria-hidden="true" class="material-symbols-outlined" fontIcon="close"/>
+        </button>
+      </div>
+
+      <!-- This is where dynamically loaded content goes -->
+      <ng-container #dynamicContentHost></ng-container>
+    </div>
+  </div>
+}

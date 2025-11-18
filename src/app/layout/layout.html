@@ -1,0 +1,18 @@
+<div class="grid-container">
+  <div class="header-container">
+    <app-header/>
+  </div>
+
+  <!-- Left Sidebar Container -->
+  <div class="left-sidebar-container">
+    <app-left-sidebar (widthChange)="handleLeftSidebarWidthChange($event)"/>
+  </div>
+
+  <main class="content"><router-outlet></router-outlet></main>
+
+  <!-- Right Sidebar Container -->
+  <div class="right-sidebar-container">
+    <app-right-sidebar (widthChange)="handleRightSidebarWidthChange($event)"/>
+  </div>
+</div>
+<drawer-container/>

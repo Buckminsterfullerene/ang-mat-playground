@@ -1,0 +1,13 @@
+// backend/tsconfig.build.json
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Disable the conflicting option for the build process
+    "allowImportingTsExtensions": false,
+    // Ensure actual JS files are emitted
+    "noEmit": false,
+    "emitDeclarationOnly": false,
+    // When building, NodeNext/ESNext modules are converted to JS in 'outDir'
+  }
+  // This file assumes your server.ts imports will link up correctly during the build process
+}

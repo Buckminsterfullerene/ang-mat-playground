@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    /* Set the target */
+    "target": "ES2020",
+
+    /* Crucial: Use NodeNext for module resolution */
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
+    // Ensure actual JS files are emitted when building (if needed)
+    // "noEmit": false,
+
+    /* Ensure interoperability */
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+
+    // REMOVE OR SET TO FALSE: This flag causes issues with external libraries' type resolution
+    "allowImportingTsExtensions": false,
+
+    /* Ensure your files are found */
+    "outDir": "./dist",
+    "rootDir": "./",
+
+    // If you have "verbatimModuleSyntax": true, it should still work with NodeNext
+  },
+  "include": ["**/*.ts"] // Make sure all .ts files are included
+}

@@ -1,0 +1,32 @@
+.todo-list-container {
+  list-style-type: none; // Removes default <ul> bullets
+  padding: 0;
+  margin: 0 auto; // Centers the list container if the viewport is wider
+  max-width: 600px; // Restricts the overall list width for better centering
+}
+
+.todo {
+  padding: 1.5em;
+  border-radius: .5em;
+
+  // Use a Surface Container color for the background of the card
+  background-color: var(--mat-sys-surface-container-low);
+  // Use the on-surface color for text readability
+  color: var(--mat-sys-on-surface);
+  // Add a material shadow effect using a system variable
+  box-shadow: var(--mat-sys-level2);
+
+  margin: 1em 0; // Add spacing between cards
+
+  opacity: 0;
+  // Start the animation off-screen to the left
+  translate: -20px 0;
+
+  &.show {
+    opacity: 1;
+    // Animate to original position (0 translation)
+    translate: 0;
+    // Combined transition for both properties
+    transition: opacity 0.5s ease-out, translate 0.5s ease-out;
+  }
+}

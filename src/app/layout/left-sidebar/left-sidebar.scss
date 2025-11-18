@@ -1,0 +1,226 @@
+/* Define SCSS variables locally for this component to avoid global conflicts */
+:host {
+  --base-clr: #11121a;
+  --line-clr: #42434a;
+  --hover-clr: #222533;
+  --text-clr: #e6e6ef;
+  --accent-clr: #5e63ff;
+  --secondary-text-clr: #b0b3c1;
+}
+
+// Ensure proper box modeling for all internal elements
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Use the element selector 'nav' as there is only one in the component template */
+nav {
+  height: 100%;
+  width: 250px;
+  padding: 5px 1em;
+  background-color: var(--base-clr);
+  border-right: 1px solid var(--line-clr);
+  position: sticky;
+  top: 0;
+  align-self: start;
+  transition: width 300ms ease-in-out, padding 300ms ease-in-out;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &.close {
+    padding: 5px;
+    width: 60px;
+  }
+
+  ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    > li:first-child {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 16px;
+
+      .logo {
+        font-weight: 600;
+        color: var(--text-clr);
+        padding: .85em;
+      }
+    }
+  }
+
+  & a {
+    align-items: start;
+  }
+
+  & .dropdown-btn {
+    align-items: center;
+  }
+
+  & a,
+  .dropdown-btn {
+    border-radius: 0.5em;
+    padding: 0.85em;
+    text-decoration: none;
+    color: var(--text-clr);
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--hover-clr);
+    }
+  }
+
+  .active {
+    color: var(--accent-clr);
+
+    mat-icon {
+      color: var(--accent-clr);
+    }
+  }
+
+  mat-icon {
+    flex-shrink: 0;
+    color: var(--text-clr);
+    transition: color 150ms ease;
+  }
+
+  & a span,
+  .dropdown-btn span {
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  .dropdown-btn {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    font: inherit;
+
+    mat-icon:last-child {
+      transition: rotate 200ms ease;
+    }
+
+    &.rotate mat-icon:last-child {
+      rotate: 180deg;
+    }
+  }
+
+  .sub-menu {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 300ms ease-in-out;
+
+    > div {
+      overflow: hidden;
+    }
+
+    &.show {
+      grid-template-rows: 1fr;
+    }
+
+    & a {
+      padding-left: 3em;
+    }
+  }
+
+  .sub-item {
+    padding: 1px;
+  }
+
+  .toggle-btn {
+    margin-left: auto;
+    padding: 1em;
+    border: none;
+    border-radius: 0.5em;
+    background: none;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--hover-clr);
+    }
+
+    mat-icon {
+      transition: rotate 150ms ease;
+    }
+
+    &.rotate mat-icon {
+      rotate: 180deg;
+    }
+  }
+}
+
+// Media Query Nesting
+@media(max-width: 800px) {
+  nav {
+    height: 60px;
+    width: 100%;
+    border-right: none;
+    border-top: 1px solid var(--line-clr);
+    padding: 0;
+    position: fixed;
+    top: unset;
+    bottom: 0;
+
+    > ul {
+      padding: 0;
+      display: grid;
+      grid-auto-columns: 60px;
+      grid-auto-flow: column;
+      align-items: center;
+      overflow-x: scroll;
+      overflow-y: hidden;
+    }
+
+    ul li {
+      height: 100%;
+
+      & a, .dropdown-btn {
+        width: 60px;
+        height: 60px;
+        padding: 0;
+        border-radius: 0;
+        justify-content: center;
+      }
+
+      span, &:first-child, .dropdown-btn svg:last-child {
+        display: none;
+      }
+
+      .sub-menu.show {
+        position: fixed;
+        bottom: 60px;
+        left: 0;
+        box-sizing: border-box;
+        height: 60px;
+        width: 100%;
+        background-color: var(--hover-clr);
+        border-top: 1px solid var(--line-clr);
+        display: flex;
+        justify-content: center;
+
+        > div {
+          overflow-x: auto;
+        }
+
+        li {
+          display: inline-flex;
+        }
+
+        a {
+          box-sizing: border-box;
+          padding: 1em;
+          width: auto;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}

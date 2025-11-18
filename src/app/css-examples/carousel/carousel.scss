@@ -1,0 +1,88 @@
+.wrapper {
+}
+.carousel {
+  width: 80%;
+  overflow-x: auto;
+  margin: 3em auto;
+  display: flex;
+  gap: 1em;
+  scroll-behavior: smooth;
+  anchor-name: --carousel;
+  scroll-snap-type: x mandatory;  // Enable scroll snapping on the x-axis for smooth snapping behavior
+  scroll-marker-group: after;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &::scroll-marker-group {
+    display: flex;
+    justify-content: center;
+    gap: 0.5em;
+  }
+
+  &::scroll-button(right), &::scroll-button(left) {
+    border: none;
+    background-color: var(--mat-sys-surface-variant);
+    font-family: Consolas, monospace;
+    font-size: 3em;
+    color: var(--mat-sys-on-surface-variant);
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    padding-bottom: .1em;
+    cursor: pointer;
+    position: fixed;
+    position-anchor: --carousel;
+  }
+
+  &::scroll-button(right) {
+    content: '>';
+    position-area: right center;
+    translate: -50%;   // Move left by half the width of the button to overlap the carousel edge
+  }
+
+  &::scroll-button(left) {
+    content: '<';
+    position-area: left center;
+    translate: 50%;   // Move right by half the width of the button to overlap the carousel edge
+  }
+
+  &::scroll-button(right):disabled, &::scroll-button(left):disabled {
+    opacity: 0.5;
+    cursor: auto;
+  }
+}
+
+.card {
+  scroll-snap-align: start;  // Snap cards to the center of the carousel when scrolling
+  flex: 0 0 20em;
+  aspect-ratio: 5 / 3;  // Maintain a consistent aspect ratio for cards in different screen sizes
+  background-color: var(--mat-sys-surface-variant);
+  padding: 1em;
+  border-radius: 0.5em;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  align-items: center;
+
+  // Scroll marker styles. These are the indicators dots at the bottom of the carousel
+  &::scroll-marker {
+    content: '';
+    height: 1em;
+    width: 1em;
+    background-color: var(--mat-sys-on-surface-variant);
+    border-radius: 50%;
+
+    // Highlight the marker for the currently centered card
+    &:target-current {
+      background-color: var(--mat-sys-primary);
+    }
+  }
+
+}
+
+@media (max-width: 500px) {
+  .card {
+    flex: 0 0 100%;
+  }
+}

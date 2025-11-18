@@ -1,0 +1,77 @@
+#css-menu-button {
+  anchor-name: --menu-button;
+  display: flex;
+  align-items: start;
+  justify-content: start;
+  padding: 1em;
+  min-height: 100vh;
+  min-height: 100dvh; // Modern browsers use 100dvh, others use 100vh fallback.  This is why min-height is used twice.
+}
+
+button {
+  background-color: darkblue;
+  padding: .7em 1.5em;
+  border: none;
+  border-radius: 5px;
+  font: inherit;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+}
+
+#menu {
+  width: max-content;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: .5em;
+  background: white;
+  margin: auto;
+
+  // Fallback for browsers that do not support anchor positioning
+  // This will center the menu on the screen using traditional methods
+  position: fixed; /* Use fixed positioning for centering fallback */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  // Use @supports to apply the experimental anchor positioning for modern browsers
+  @supports (top: anchor(bottom)) {
+    position: absolute; /* Revert to absolute for anchor positioning */
+    top: unset;
+    left: unset;
+    transform: unset; /* Remove the fallback transform */
+
+    position-anchor: --menu-button;
+    top: anchor(bottom);
+    left: anchor(left);
+    // This sets the position fallbacks of the menu. It will try the first in the list, then the second if the first doesn't fit, etc.
+    position-try-fallbacks: --below-right, --below-left;
+  }
+
+  &:popover-open {
+    display: grid;
+  }
+
+  a {
+    text-decoration: none;
+    color: black;
+    padding: .7em 1.5em;
+    border-radius: .25em;
+  }
+}
+
+/* @position-try rules are also experimental and implicitly within the scope of @supports in modern browsers */
+@position-try --below-right {
+  // Use inset to unset properties. This is a shorthand for setting 'unset' to all other properties.
+  inset: unset;
+  // Default position
+  top: anchor(bottom);
+  left: anchor(left);
+}
+@position-try --below-left {
+  // Use inset to unset properties. This is a shorthand for setting 'unset' to all other properties.
+  inset: unset;
+  // Default position
+  top: anchor(bottom);
+  left: anchor(right);
+}

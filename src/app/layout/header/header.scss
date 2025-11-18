@@ -1,0 +1,32 @@
+.header-container {
+  padding: 0 20px;
+  height: 60px; // Fixed height for the banner
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--mat-sys-primary-container);
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  /* Hide the toggle button by default on large screens */
+  .menu-toggle-button {
+    display: none;
+  }
+}
+
+/* Styles for viewports smaller than 800px */
+@media (max-width: 800px) {
+  /* Hide the regular navigation links */
+  .desktop-nav-wrapper {
+    display: none;
+  }
+
+  /* Display the menu button */
+  .header-container .menu-toggle-button {
+    display: block;
+  }
+}

@@ -1,0 +1,22 @@
+<!-- src/app/stream-example.html -->
+
+<h2>Stream Example Component (using httpResource)</h2>
+
+@if (isLoading()) {
+  <p>Loading message...</p>
+}
+@else if (chatMessage()) {
+  <p>Message from API: <strong>{{ chatMessage()?.message }}</strong></p>
+}
+@else if (error()) {
+  <div style="color: red;">
+    <p>Failed to load chat message.</p>
+    <!-- Use the statusCode signal directly -->
+    <p>Error Status: {{ statusCode() }}</p>
+
+    <!-- Example of conditional rendering based on status code -->
+    @if (statusCode() === 404) {
+      <p>The chat endpoint was not found.</p>
+    }
+  </div>
+}

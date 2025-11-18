@@ -1,0 +1,13 @@
+.nav-container {
+  display: flex;
+  gap: 10px; // Spacing between items
+
+  &.row {
+    flex-direction: row;
+  }
+
+  &.column {
+    flex-direction: column;
+    width: 100%; // Make buttons stretch in column mode
+  }
+}

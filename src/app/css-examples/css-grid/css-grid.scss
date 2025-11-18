@@ -1,0 +1,66 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1em;
+  padding: 1em;
+  grid-auto-rows: 250px;
+}
+
+.item {
+  padding: 2em;
+  background-color: darkslategrey;
+  color: white;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 2em;
+}
+
+.bento-container {
+  display: grid;
+  /* Creates responsive columns between 200px and 1fr width */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  /* Establishes a flow with consistent row heights and gaps */
+  grid-auto-rows: 200px;
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.bento-item {
+  /* Basic styling for all items */
+  background-color: #f3f4f6;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+/* Modifier class to make an item span 2 columns */
+.span-2-col {
+  /* This makes the item start at its current column line and end two lines over */
+  grid-column: span 2;
+}
+
+/* Modifier class to make an item span 2 rows */
+.span-2-row {
+  /* This makes the item start at its current row line and end two lines over */
+  grid-row: span 2;
+}
+
+/* Optional: Add basic styling for text inside items */
+.bento-item h2 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.bento-item p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #4b5563;
+}

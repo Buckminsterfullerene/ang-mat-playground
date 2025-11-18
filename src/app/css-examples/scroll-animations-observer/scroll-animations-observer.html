@@ -1,0 +1,15 @@
+<ul class="todo-list-container">
+  @for (todo of todos(); track $index) {
+    <li class="todo" #todoItem>
+      {{ todo }}
+    </li>
+  }
+</ul>
+
+<!-- Accessing the public signals exposed on the component instance -->
+@if (isLoading()) {
+  <p>Loading more items...</p>
+}
+@if (isError()) {
+  <p>Error loading items.</p>
+}
