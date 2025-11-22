@@ -8,7 +8,7 @@
         }
         <!-- Bind click event to the toggle method -->
         <!-- Note the [class.rotate] logic is reversed for the right-aligned button -->
-        <button (click)="toggleSidebar()" class="toggle-btn" [class.rotate]="isSidebarOpen()">
+        <button (click)="toggleSidebarInternal()" class="toggle-btn" [class.rotate]="isSidebarOpen()">
           <!-- Icon choice reversed from left-sidebar for visual consistency -->
           <mat-icon aria-hidden="true" class="material-symbols-outlined" fontIcon="keyboard_double_arrow_right"></mat-icon>
         </button>
@@ -47,7 +47,7 @@
                 <!-- Loop through sub-menu items -->
                 @for (subItem of item.subItems; track subItem.label) {
                   <li class="sub-item">
-                    <a [routerLink]="subItem.link" routerLinkActive="active">
+                    <a [routerLink]="subItem.link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                       <!-- Sub-item icons are optional but good practice -->
                       <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="subItem.icon" aria-label="{{ subItem.label }} icon" />
                       <!-- Show link text if sidebar is open -->

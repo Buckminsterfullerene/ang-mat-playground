@@ -31,5 +31,25 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () => import('./css-examples/login/login').then(m => m.Login)
+  },
+  {
+    path: 'sub-grid',
+    // Use loadComponent for lazy loading the layout container
+    loadComponent: () => import('./components/sub-grid-container/sub-grid-container').then(m => m.SubGridContainer),
+    children: [
+      {
+        path: '',
+        redirectTo: 'child-route-one', // Redirect to a default child route
+        pathMatch: 'full'
+      },
+      {
+        path: 'child-route-one',
+        loadComponent: () => import('./example-child-sub-route/example-child-sub-route').then(m => m.ExampleChildSubRoute)
+      },
+      {
+        path: 'chat',
+        loadComponent: () => import('./stream-example/stream-example').then(m => m.StreamExample)
+      }
+    ]
   }
 ];

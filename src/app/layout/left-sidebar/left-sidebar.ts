@@ -32,6 +32,14 @@ export class LeftSidebar {
       ]
     },
     {
+      label: 'Sub Grid Example',
+      icon: 'grid_view',
+      subItems: [
+        { label: 'Child Route One', icon: 'filter_1', link: '/sub-grid/child-route-one' },
+        { label: 'Chat', icon: 'chat', link: '/sub-grid/chat' },
+      ]
+    },
+    {
       label: 'Todo-Lists',
       icon: 'list_alt',
       subItems: [

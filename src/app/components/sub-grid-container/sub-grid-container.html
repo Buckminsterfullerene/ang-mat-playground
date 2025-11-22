@@ -1,0 +1,16 @@
+<div class="sub-grid-container">
+  <div class="content-main">
+    <!-- Sub-pages will be rendered here by the router -->
+    <router-outlet></router-outlet>
+  </div>
+  <aside class="right-sidebar"
+         [class.is-hidden-mode]="currentCollapseMode() === SidebarCollapseMode.Hidden && !isRightSidebarOpen()">
+    <!-- Pass the state and mode managed by the service -->
+    <app-right-sidebar
+      [isSidebarOpen]="isRightSidebarOpen()"
+      [collapseMode]="currentCollapseMode()"
+      (widthChange)="handleRightSidebarWidthChange($event)"
+      (toggleSidebarEvent)="handleSidebarToggleEvent($event)"
+    />
+  </aside>
+</div>

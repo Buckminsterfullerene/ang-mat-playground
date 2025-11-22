@@ -1,0 +1,45 @@
+:host {
+  // Define a fallback value for the custom property if needed
+  --sub-grid-right-sidebar-width: 300px;
+  // Ensure we transition smoothly for the visibility
+  transition: visibility 300ms ease;
+}
+
+.sub-grid-container {
+  display: grid;
+  // Use the CSS variable here instead of a fixed value
+  grid-template-columns: 1fr var(--sub-grid-right-sidebar-width);
+  height: 100%;
+  // Add a transition to make the grid column change smooth
+  transition: grid-template-columns 300ms ease-in-out;
+  overflow: hidden;
+
+  .content-main {
+    /* Ensures main content doesn't create overflow when sidebar is 0 width */
+    overflow-x: hidden;
+  }
+
+  .right-sidebar {
+    background-color: var(--base-clr, #11121a);
+    border-left: 1px solid var(--line-clr, #42434a);
+
+    /* Prevent content overflow and hide totally when in 'hidden' mode */
+    overflow: hidden;
+    transition: opacity 300ms ease;
+
+    &.is-hidden-mode {
+      opacity: 0; /* Fade out content */
+      /* display: none is instantaneous, opacity is smooth */
+    }
+  }
+}
+
+// Media query to stack them on smaller screens, if desired
+@media (max-width: 1024px) {
+  .sub-grid-container {
+    grid-template-columns: 1fr; // Stack them vertically
+    .right-sidebar {
+      display: none; // Hide sidebar entirely on small screens if preferred, or just move to bottom
+    }
+  }
+}
