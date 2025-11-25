@@ -1,0 +1,58 @@
+.content-wrapper {
+  padding: 2em;
+  display: grid;
+  gap: 2em;
+}
+
+.gradient-border {
+  &::after {
+    content: '';
+    background: linear-gradient(to right, #0066ff, #ff32d6);
+    position: absolute;
+    padding: .1em;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    border-radius: inherit;
+    animation: gradientAnimation 15s ease infinite;
+  }
+  border-image: linear-gradient(to right, #0066ff, #ff32d6) 1;
+  height: 60px;
+  width: 200px;
+  border-width: 5px;
+
+  // the number of slices for top, right, bottom, left.  This is not the width of the border.
+  //border-image: linear-gradient(to right, #0066ff, #ff32d6) 1 1 1 1;
+}
+
+.btn-gradient {
+  //background: linear-gradient(to right, #0066ff, #ff32d6);
+  border: none;
+  color: #f0f0f0;
+  padding: 1em 2em;
+  border-radius: 1000px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    // To make a border effect, we make the pseudo element slightly larger than the button itself with the height
+    // and width.
+    height: 107%;
+    width: 101%;
+    border-radius: inherit;
+    background-image: linear-gradient(to bottom right, #0066ff, #ff32d6);
+    z-index: -1;
+  }
+  &:hover {
+    z-index: 0;
+    // Adding the box shadow on hover to give a glowing effect
+    // The first param is the x axis offset, the second is the y axis offset, the third is the blur radius, and the fourth is the color
+    // The first shadow is for the left side, the second is for the right side they are separated by a comma.
+    // Give the colors an opacity to reduce the intensity of the glow.
+    box-shadow: 40px 0 100px #0066ff, -40px 0 100px #ff32d6;
+  }
+}

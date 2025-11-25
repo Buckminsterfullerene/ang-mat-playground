@@ -1,0 +1,53 @@
+/* Define CSS variables for easier theming */
+:host {
+  --video-bg: #fff;
+  --text-color: #333;
+  --shadow-color: rgba(0, 0, 0, 0.15);
+  display: block; /* Ensure the component takes up full width if needed */
+  padding: 1rem;
+}
+
+.video-container {
+  max-width: 800px; /* Optional: Constrain max width for large screens */
+  margin: 0 auto;
+}
+
+h1 {
+  font-weight: 300;
+  line-height: 1;
+  /*
+   Responsive font size using clamp.
+   The clamp() CSS function allows you to set a value within a specified range, defined by a minimum, a preferred, and a
+   maximum value. This is particularly useful for creating fluid and responsive designs without relying on extensive media queries.
+   This can be applied to font sizes, widths, heights, margins, paddings, and more.
+   */
+  font-size: clamp(2rem, 4vw, 4rem);
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
+
+video {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  background-color: var(--video-bg);
+  box-shadow: 0 8px 24px var(--shadow-color); /* Slightly enhanced shadow */
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  cursor: pointer;
+  object-fit: cover; /* Ensures video covers the player area neatly */
+
+  /* Add a subtle hover effect */
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px var(--shadow-color);
+  }
+}
+
+/* Note on styling native controls:
+   Styling the *internal* components of the native HTML5 video player
+   (like the play button, progress bar) is limited with standard CSS.
+   Advanced styling often requires creating a custom control overlay
+   with JavaScript/TypeScript, but for modern, clean looks, native controls
+   with good container styling work well.
+*/

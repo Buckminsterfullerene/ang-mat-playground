@@ -1,0 +1,25 @@
+<div class="container">
+  <nav>
+    <h1>Brand</h1>
+    <ul>
+    <!-- Close button visible when menu is open on mobile -->
+    @if (menuOpen()) {
+      <button matIconButton aria-label="Close menu button" (click)="toggleMenu()">
+        <mat-icon class="material-symbols-outlined" fontIcon="close"/>
+      </button>
+    }
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">Projects</a></li>
+      <li><a href="#">Contact</a></li>
+
+    </ul>
+    <!-- Menu button visible when menu is closed on mobile -->
+    @if (!menuOpen()) {
+      <button matMiniFab aria-label="Open menu button" (click)="toggleMenu()">
+        <mat-icon class="material-symbols-outlined" fontIcon="menu"/>
+      </button>
+    }
+  </nav>
+</div>

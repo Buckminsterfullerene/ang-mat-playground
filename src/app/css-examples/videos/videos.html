@@ -1,0 +1,19 @@
+<div class="video-container">
+  <h1>{{ title }}</h1>
+
+  <!-- Using native controls, styled with CSS -->
+  <video
+    controls
+    autoplay
+    loop
+    muted
+    playsinline
+    width="320"
+    height="240"
+    aria-label="Video Player"
+  >
+    <source [src]="src" [type]="type" />
+    <!-- Fallback content for older browsers -->
+    Your browser does not support the video tag.
+  </video>
+</div>

@@ -1,0 +1,82 @@
+<div class="contact-form">
+  <div class="flow">
+    <h1>My Form</h1>
+  </div>
+  <form>
+    <div class="form-group ">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" required>
+    </div>
+    <div class="form-group">
+      <label for="company">Company Name</label>
+      <input type="text" id="company" required>
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" required>
+    </div>
+    <div class="form-group">
+      <label for="phone">Phone</label>
+      <input type="tel" id="phone" required>
+    </div>
+    <div class=form-group>
+      <input type="checkbox" id="privacy">
+      <label for="privacy" class="fine-print">I agree that my personal data will be processed in accordance with the <a href="#">Privacy Policy</a></label>
+    </div>
+    <button>Send Message</button>
+  </form>
+</div>
+
+<!-- HTML elements -->
+<code>myCode = here</code>
+
+<p>press <kbd>CTRL</kbd> + <kbd>S</kbd> to save</p>
+
+
+<label for="browser">Choose your browser from the list:</label>
+<input list="browsers" name="browser" id="browser">
+<datalist id="browsers">
+  <option value="Edge">
+  <option value="Firefox">
+  <option value="Chrome">
+  <option value="Opera">
+  <option value="Safari">
+</datalist>
+
+<details>
+  <summary>Epcot Center</summary>
+  <p>Epcot is a theme park at Walt Disney World Resort featuring exciting attractions, international pavilions, award-winning fireworks and seasonal special events.</p>
+</details>
+
+<p>My favorite color is <del>blue</del> <ins>red</ins>!</p>
+<p><dfn>HTML</dfn> is the standard markup language for creating web pages.</p>
+<!-- Description List -->
+<dl>
+  <dt>Coffee</dt>
+  <dd>Black hot drink</dd>
+  <dt>Milk</dt>
+  <dd>White cold drink</dd>
+</dl>
+<!-- mark element highlights text -->
+<p>Do not forget to buy <mark>milk</mark> today.</p>
+
+<form oninput="x.value=parseInt(a.value)+parseInt(b.value)">
+  <input type="range" id="a" value="50">
+  +<input type="number" id="b" value="25">
+  =<output name="x" for="a b"></output>
+</form>
+
+<p><s>Only 50 tickets left!</s></p>
+<!-- The <samp> tag is used to define sample output from a computer program. The content inside is displayed in the browser's default monospace font. -->
+<p><samp>File not found.<br>Press F1 to continue</samp></p>
+<p>This text contains <sub>subscript</sub> text.</p>
+<p>This text contains <sup>superscript</sup> text.</p>
+<p>Open from <time>10:00</time> to <time>21:00</time> every weekday.</p>
+<p>I have a date on <time datetime="2008-02-14 20:00">Valentines day</time>.</p>
+<!-- The <wbr> (Word Break Opportunity) tag specifies where in a text it would be ok to add a line-break. -->
+<p>This is a veryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryveryvery<wbr>longwordthatwillbreakatspecific<wbr>placeswhenthebrowserwindowisresized.</p>
+<ruby>Main text
+  <rt>little text</rt>
+  <!-- <rp> element that defines what to show for browsers that not support ruby annotations -->
+  <rp>little text</rp>
+</ruby>

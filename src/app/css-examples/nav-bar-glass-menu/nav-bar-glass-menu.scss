@@ -1,0 +1,115 @@
+/* Use :root when these variables might be used globally, otherwise define them locally if only used within this component */
+:root {
+  --color-primary: #132821;
+  --color-accent: #1B5B46;
+  --color-dark-green: #1D3F31;
+  --color-medium-green: #4C896C;
+  --color-light-green: #e2f0e7;
+}
+
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  list-style: none;
+  text-decoration: none;
+  color: var(--color-light-green);
+  box-sizing: border-box;
+}
+
+.container {
+  background-image: url('/images/background.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Nesting all navigation-related styles inside the parent `nav` block */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 75%;
+  margin: auto;
+  padding: 10px 0;
+
+  & h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+  }
+
+  /* Desktop UL styles */
+  & ul {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    position: relative;
+
+    & li a {
+      font-size: 20px;
+      cursor: pointer;
+      position: relative;
+      transition: color 400ms ease;
+
+      &:hover { color: var(--color-medium-green); }
+
+      &::before {
+        content: "";
+        background: var(--color-medium-green);
+        width: 50%;
+        height: 3px;
+        position: absolute;
+        top: 22px;
+        left: -50%;
+        transition: all 400ms ease;
+      }
+
+      &:hover::before { left: 0; }
+    }
+  }
+
+  // The media queries must be inside the NAV scope, but outside the UL scope.
+
+  @media screen and (max-width: 995px) {
+    width: 90%; // Nav width on mobile
+
+    /* Mobile UL styles */
+    & ul {
+      position: absolute;
+      flex-direction: column;
+      align-items: flex-start;
+      right: -100%; // Start off-screen
+      top: 0;
+      width: 50%;
+      background: #1b5b4691;
+      backdrop-filter: blur(16px);
+      height: 100vh;
+      padding: 10rem 0 0 4rem;
+      transition: right 0.4s ease;
+
+      & li a {
+        &:hover { color: var(--color-dark-green); }
+        &::before { background: var(--color-dark-green); }
+      }
+    }
+  }
+
+  @media screen and (max-width: 428px) {
+    & ul {
+      width: 70%;
+      padding: 5rem 0 0 2rem;
+    }
+  }
+}
+
+/* This is a top-level selector for the host component that overrides the 'right' property of the UL inside it */
+/* This works because it's a top-level selector targeting the :host component */
+:host.menu-active nav ul {
+  right: 0 !important;
+}

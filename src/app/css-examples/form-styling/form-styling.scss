@@ -1,0 +1,124 @@
+/* general styling */
+:host {
+  --surface-0: hsl(229, 41%, 5%);
+  --surface-1: hsl(229, 25%, 12%);
+  --surface-2: hsl(234, 26%, 16%);
+  --text-1: hsl(229, 12%, 100%);
+  --text-2: hsl(229, 12%, 66%);
+  --required: hsl(321, 32%, 56%);
+  --accent: hsl(262, 84%, 52%);
+  --border: 1px solid hsl(229, 22%, 19%);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+h1 {
+  font-weight: 300;
+  line-height: 1;
+  /*
+   Responsive font size using clamp.
+   The clamp() CSS function allows you to set a value within a specified range, defined by a minimum, a preferred, and a
+   maximum value. This is particularly useful for creating fluid and responsive designs without relying on extensive media queries.
+   This can be applied to font sizes, widths, heights, margins, paddings, and more.
+   */
+  font-size: clamp(2rem, 4vw, 4rem); /* min: 2rem, preferred: 4vw, max: 4rem */
+}
+
+a {
+  color: hsl(from var(--accent) h s 80%);
+}
+
+label {
+  text-transform: uppercase;
+  font-size: 1rem;
+}
+
+.fine-print {
+  font-size: 0.925rem;
+  text-transform: revert;
+  line-height: 1.4;
+}
+
+.contact-form {
+  display: grid;
+  gap: 1rem;
+
+  background-color: var(--surface-1);
+  padding: 3rem;
+  border-radius: 24px;
+  width: min(100% - 4rem, 1200px);
+  margin-inline: auto;
+}
+
+button {
+  cursor: pointer;
+  background-color: var(--accent);
+  color: var(--text-1);
+  padding: 1em 1.5em;
+  border: 0;
+  border-radius: 16px;
+
+  &:hover,
+  &:focus-visible {
+    background-color: hsl(from var(--accent) h s 30%);
+  }
+}
+
+input,
+button,
+select,
+textarea {
+  font: inherit;
+}
+
+form {
+  display: grid;
+  gap: 1rem;
+
+  @media (width > 720px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.form-group {
+  display: grid;
+  gap: 0.5cap;
+}
+
+label {
+  text-transform: uppercase;
+  font-size: 1rem;
+
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+input {
+  background: var(--surface-2);
+  color: var(--text-1);
+  border: var(--border);
+  border-radius: 16px;
+  padding: 1ex 2ex;
+
+  accent-color: var(--accent);
+  caret-color: yellow;
+}
+
+input:not([type="checkbox"], [type="radio"]) {
+  width: 100%;
+}
+
+.form-group:has(.fine-print) {
+  grid-column: 1 / -1;
+
+  display: flex;
+  gap: 0.5ch;
+}
+
+.contact-form button {
+  justify-self: start;
+}
+

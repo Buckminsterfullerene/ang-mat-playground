@@ -33,6 +33,30 @@ export const routes: Routes = [
     loadComponent: () => import('./css-examples/login/login').then(m => m.Login)
   },
   {
+    path: 'nav-bar-glass-menu',
+    loadComponent: () => import('./css-examples/nav-bar-glass-menu/nav-bar-glass-menu').then(m => m.NavBarGlassMenu)
+  },
+  {
+    path: 'gradient-examples',
+    loadComponent: () => import('./css-examples/gradients/gradients').then(m => m.Gradients)
+  },
+  {
+    path: 'form-examples',
+    loadComponent: () => import('./css-examples/form-styling/form-styling').then(m => m.FormStyling)
+  },
+  {
+    path: 'video-examples',
+    loadComponent: () => import('./css-examples/videos/videos').then(m => m.Videos)
+  },
+  {
+    path: 'glass-examples',
+    loadComponent: () => import('./css-examples/glass-effect/glass-effect').then(m => m.GlassEffect)
+  },
+  {
+    path: 'dialogs-examples',
+    loadComponent: () => import('./css-examples/dialogs/dialogs').then(m => m.Dialogs)
+  },
+  {
     path: 'sub-grid',
     // Use loadComponent for lazy loading the layout container
     loadComponent: () => import('./components/sub-grid-container/sub-grid-container').then(m => m.SubGridContainer),

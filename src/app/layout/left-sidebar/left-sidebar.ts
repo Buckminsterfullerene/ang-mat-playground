@@ -24,11 +24,17 @@ export class LeftSidebar {
       label: 'CSS',
       icon: 'css',
       subItems: [
-        { label: 'Carousel', icon: 'view_carousel', link: '/carousel' },
+        { label: 'Carousel', icon: 'view_carousel', link: '/carousel', external: true },
         { label: 'CSS Grid', icon: 'auto_awesome_mosaic', link: '/css-grid' },
         { label: 'CSS Menu Button this is a very long label', icon: 'lightbulb', link: '/css-menu-button' },
         { label: 'Scroll Observer', icon: 'unfold_more_double', link: '/scroll-animations-observer' },
         { label: 'Sign in', icon: 'login', link: '/login' },
+        { label: 'Nav Bar Glass Menu', icon: 'menu', link: '/nav-bar-glass-menu' },
+        { label: 'Gradient Examples', icon: 'gradient', link: '/gradient-examples' },
+        { label: 'Form Examples', icon: 'dynamic_form', link: '/form-examples' },
+        { label: 'Video Examples', icon: 'video_camera_back', link: '/video-examples' },
+        { label: 'Glass Examples', icon: 'glass_cup', link: '/glass-examples' },
+        { label: 'Dialogs Examples', icon: 'dialogs', link: '/dialogs-examples' },
       ]
     },
     {

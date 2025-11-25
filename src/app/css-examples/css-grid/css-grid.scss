@@ -64,3 +64,20 @@
   font-size: 0.9rem;
   color: #4b5563;
 }
+
+.image-gallery {
+  width: min(1000px, 100%);
+  margin: 0 auto;
+  // columns 3=columns, 300px=width of each column
+  columns: 3 300px;
+  // controls gap between columns
+  column-gap: 1em;
+
+  img {
+    width: 100%;
+    // We need to make images block level to avoid inline space issues since images are inline by default
+    display: block;
+    margin-bottom: 1em;
+  }
+}
+

@@ -1,0 +1,42 @@
+.glass-background {
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+  height: 100%;
+  background: url('/images/garden.jpg') no-repeat center center/cover fixed;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.glass-container {
+  height: 520px;
+  width: 350px;
+  padding: 30px 50px;
+  border-radius: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  font-family: Poppins, sans-serif;
+  font-size: 18px;
+  text-align: justify;
+  line-height: 185%;
+
+  // Glass effect
+  backdrop-filter: blur(8px);
+  // The background color is the color of the glass.  Change it if you want a color tint.
+  background-color: rgba(255, 255, 255, 0.219);
+  // border effect: apply to top and left sides to create light source effect
+  border-top: 2px solid rgba(255, 255, 255, 0.4);
+  border-left: 2px solid rgba(255, 255, 255, 0.3);
+  // shadow effect: make it look "weak" since it's glass
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.089);
+}
+
+h1 {
+  margin: 30px;
+  color: #ffffff;
+}

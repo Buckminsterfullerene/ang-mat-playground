@@ -8,7 +8,7 @@
         <!-- Bind click event to the toggle method -->
         <button (click)="toggleSidebar()" class="toggle-btn" [class.rotate]="!isSidebarOpen()">
           <!-- Use Material Icon for the toggle button -->
-          <mat-icon aria-hidden="true" class="material-symbols-outlined" fontIcon="keyboard_double_arrow_left"></mat-icon>
+          <mat-icon aria-hidden="true" class="material-symbols-outlined" fontIcon="keyboard_double_arrow_left"/>
         </button>
       </li>
 
@@ -17,13 +17,31 @@
         <li>
           <!-- links -->
           @if (item.link) {
-            <a [routerLink]="item.link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-              <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="item.icon" aria-label="{{ item.label }} icon" />
-              <!-- Show link text if sidebar is open -->
-              @if (isSidebarOpen()) {
-                <span>{{ item.label }}</span>
-              }
-            </a>
+            <!-- Conditionally render an external or internal link -->
+            @if (item.external) {
+              <!-- External Link: use a standard anchor tag -->
+              <a
+                [href]="item.link"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="external-link"
+              >
+                <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="item.icon" aria-label="{{ item.label }} icon" />
+                <!-- Show link text if sidebar is open -->
+                @if (isSidebarOpen()) {
+                  <span>{{ item.label }}</span>
+                }
+              </a>
+            } @else {
+              <!-- Internal Link: use routerLink directive -->
+              <a [routerLink]="item.link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="item.icon" aria-label="{{ item.label }} icon" />
+                <!-- Show link text if sidebar is open -->
+                @if (isSidebarOpen()) {
+                  <span>{{ item.label }}</span>
+                }
+              </a>
+            }
           }
 
           <!-- items with sub-menus (dropdowns) -->
@@ -46,14 +64,31 @@
                 <!-- Loop through sub-menu items -->
                 @for (subItem of item.subItems; track subItem.label) {
                   <li class="sub-item">
-                    <a [routerLink]="subItem.link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                      <!-- Sub-item icons are optional but good practice -->
-                      <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="subItem.icon" aria-label="{{ subItem.label }} icon" />
-                      <!-- Show link text if sidebar is open -->
-                      @if (isSidebarOpen()) {
-                        <span>{{ subItem.label }}</span>
-                      }
-                    </a>
+                    <!-- Conditionally render sub-item links -->
+                    @if (subItem.external) {
+                      <a
+                        [href]="subItem.link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="external-link"
+                      >
+                        <!-- Sub-item icons are optional but good practice -->
+                        <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="subItem.icon" aria-label="{{ subItem.label }} icon" />
+                        <!-- Show link text if sidebar is open -->
+                        @if (isSidebarOpen()) {
+                          <span>{{ subItem.label }}</span>
+                        }
+                      </a>
+                    } @else {
+                      <a [routerLink]="subItem.link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                        <!-- Sub-item icons are optional but good practice -->
+                        <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="subItem.icon" aria-label="{{ subItem.label }} icon" />
+                        <!-- Show link text if sidebar is open -->
+                        @if (isSidebarOpen()) {
+                          <span>{{ subItem.label }}</span>
+                        }
+                      </a>
+                    }
                   </li>
                 }
               </div>
