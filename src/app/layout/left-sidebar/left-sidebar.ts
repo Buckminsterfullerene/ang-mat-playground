@@ -60,6 +60,17 @@ export class LeftSidebar {
     { label: 'Profile', icon: 'person', link: '/' }
   ];
 
+  /**
+   * Toggle the left sidebar open state and emit the corresponding width.
+   *
+   * Flips the `isSidebarOpen` signal. When opening, emits the expanded width
+   * (250). When closing, emits the compact width (60) and clears any open
+   * submenu label so submenus collapse with the sidebar.
+   *
+   * Side effects:
+   * - Mutates signals: `isSidebarOpen`, `openSubMenuLabel`.
+   * - Emits via: `widthChange.emit(...)`.
+   */
   toggleSidebar(): void {
     this.isSidebarOpen.update(isOpen => {
       const newState = !isOpen;
@@ -72,6 +83,18 @@ export class LeftSidebar {
     }
   }
 
+  /**
+   * Toggle the submenu for a given nav item.
+   *
+   * If the provided item is already the open submenu, this closes it by clearing
+   * `openSubMenuLabel`. Otherwise it sets `openSubMenuLabel` to the item's label.
+   * If the sidebar is currently closed, opening the submenu will also open the
+   * sidebar and emit the expanded width.
+   *
+   * Side effects:
+   * - Mutates signals: `openSubMenuLabel`, possibly `isSidebarOpen`.
+   * - Emits via: `widthChange.emit(250)` when opening a closed sidebar.
+   */
   toggleSubMenu(item: NavItem): void {
     const currentLabel = this.openSubMenuLabel();
     if (currentLabel === item.label) {
@@ -86,6 +109,12 @@ export class LeftSidebar {
     }
   }
 
+  /**
+   * Return whether the submenu for the given label is currently open.
+   *
+   * Read-only accessor that compares the stored `openSubMenuLabel` signal to the
+   * provided `itemLabel`.
+   */
   isSubMenuOpen(itemLabel: string): boolean {
     return this.openSubMenuLabel() === itemLabel;
   }

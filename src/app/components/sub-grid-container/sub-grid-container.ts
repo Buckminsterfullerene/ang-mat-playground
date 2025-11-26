@@ -28,12 +28,31 @@ export class SubGridContainer {
   protected isRightSidebarOpen = this.sidebarService.isOpen;
   protected currentCollapseMode = this.sidebarService.collapseMode;
 
+  /**
+   * Update the right sidebar width signal.
+   *
+   * Sets the `rightSidebarWidth` signal to the provided pixel value so the host
+   * binding \`--sub-grid-right-sidebar-width.px\` is updated. A value of 0 is
+   * used when the sidebar is hidden.
+   *
+   * Side effects:
+   * - Mutates signal: \`rightSidebarWidth\`.
+   */
   handleRightSidebarWidthChange(width: number): void {
     // This value will be 0 when in 'Hidden' mode and closed
     this.rightSidebarWidth.set(width);
   }
 
-  // Handle toggles that originate from *within* the sidebar component itself
+  /**
+   * Handle toggle events emitted by the sidebar component.
+   *
+   * Synchronizes the shared `RightSidebarState.isOpen` signal with the boolean
+   * `newState` coming from the sidebar's internal toggle control. This updates
+   * the global sidebar open state so host bindings and other consumers react.
+   *
+   * Side effects:
+   * - Mutates signal: `sidebarService.isOpen`.
+   */
   handleSidebarToggleEvent(newState: boolean): void {
     // Sync the service's state with the event from the sidebar's internal button
     this.sidebarService.isOpen.set(newState);

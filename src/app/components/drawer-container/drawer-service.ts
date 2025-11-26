@@ -17,6 +17,18 @@ export class DrawerService {
 
   #config = signal<DrawerConfig | null>(null); // Signal to hold config
 
+  /**
+   * Open the drawer and prepare the provided component and configuration.
+   *
+   * Sets the component type and configuration inside an `untracked` block to
+   * avoid emitting intermediate signal updates, records the element that had
+   * focus before opening so focus can be restored later, and marks the drawer
+   * as open so consumers can render and initialize the dynamic content.
+   *
+   * Side effects:
+   * - Mutates internal signals: `#componentToRender`, `#config`, `#isDrawerOpen`.
+   * - Stores `#elementBeforeDrawerOpened` from `document.activeElement`.
+   */
   open(componentType: Type<unknown>, config: DrawerConfig): void {
     // Enforce a required config object
     untracked(() => {
@@ -28,7 +40,19 @@ export class DrawerService {
     this.#isDrawerOpen.set(true);
   }
 
-  // Method to close the drawer
+  /**
+   * Close the drawer and clear any dynamic state and references.
+   *
+   * Marks the drawer as closed by updating the internal open signal, clears the
+   * stored reference to the element that had focus before the drawer opened, and
+   * resets the stored component type and configuration so dynamic content is
+   * released. Intended to be a no-op from a UI perspective beyond these state
+   * changes (visual transitions are handled by the container component).
+   *
+   * Side effects:
+   * - Mutates internal signals: `#isDrawerOpen`, `#config`, `#componentToRender`.
+   * - Clears `#elementBeforeDrawerOpened`.
+   */
   close(): void {
     this.#isDrawerOpen.set(false);
     this.#elementBeforeDrawerOpened = null;
@@ -36,16 +60,37 @@ export class DrawerService {
     this.#config.set(null);
     this.#componentToRender.set(null);
   }
+
+  /**
+   * Return the current drawer configuration without mutating internal state.
+   *
+   * Reads the internal `#config` signal synchronously and returns the current
+   * `DrawerConfig` instance or `null` when no configuration is set. This is a
+   * read-only accessor with no side effects.
+   */
   getConfig(): DrawerConfig | null {
     return this.#config();
   }
 
-  // Method to toggle the state
+  /**
+   * Toggle the drawer open state.
+   *
+   * If the drawer is currently open, this closes it. If the drawer is closed,
+   * this attempts to open it using the currently stored component type and
+   * configuration. If no component or config is available when opening is
+   * requested, the operation is aborted and a warning is logged.
+   *
+   * Side effects:
+   * - May call {@link open} or {@link close}, which mutate internal signals:
+   *   `#isDrawerOpen`, `#componentToRender`, and `#config`.
+   * - Logs a warning when attempting to open without a previously set component
+   *   type and configuration.
+   */
   toggle(): void {
     if (this.isOpen()) {
       this.close();
     } else {
-      // FIX: Check for the required component type and config before opening
+      // Check for the required component type and config before opening
       const existingComponent = this.currentComponent();
       const existingConfig = this.getConfig();
 
@@ -58,6 +103,13 @@ export class DrawerService {
     }
   }
 
+  /**
+   * Return the element that had focus immediately before the drawer opened.
+   *
+   * Read-only accessor that returns the stored `HTMLElement` (or `null` if
+   * none was recorded). Intended for consumers that want to restore focus
+   * after the drawer closes; calling this does not mutate internal state.
+   */
   getElementBeforeDrawerOpened(): HTMLElement | null {
     return this.#elementBeforeDrawerOpened;
   }

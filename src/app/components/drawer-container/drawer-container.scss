@@ -21,10 +21,10 @@
   top: 0;
   right: 0;
   height: 100vh;
-  width: 300px; /* Adjust width as needed */
+  width: 300px; /* This is the default width. Adjust width as needed in the drawerService.open() call. */
   background-color: var(--mat-sys-outline-variant);
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
-  transform: translateX(0%); /* Start off-screen to the right */
+  transform: translateX(100%); /* Start off-screen to the right */
   transition: transform 0.3s ease;
   z-index: 1001;
   display: flex;

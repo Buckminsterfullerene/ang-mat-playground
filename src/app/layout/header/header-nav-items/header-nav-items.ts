@@ -3,6 +3,16 @@ import { MatButton } from '@angular/material/button';
 import { DrawerContext } from '../../../components/drawer-container/drawer-container-interface';
 import { CommonModule } from '@angular/common';
 
+/**
+ * A reusable component that renders the application's primary navigation links.
+ *
+ * Its main purpose is to adapt its visual layout based on the provided input `context`,
+ * allowing it to be used flexibly in different UI locations—such as inline within the
+ * main header (default mode) or stacked vertically within a side navigation drawer (column mode).
+ *
+ * It manages the required CSS classes dynamically via the `modeClass` getter to ensure
+ * the correct presentation in either scenario.
+ */
 @Component({
   selector: 'header-nav-items',
   imports: [
@@ -13,8 +23,19 @@ import { CommonModule } from '@angular/common';
   styleUrl: './header-nav-items.scss',
 })
 export class HeaderNavItems {
+  /**
+   * An input property (signal-based) that receives configuration data
+   * for how the navigation items should be displayed (e.g., 'column' or 'default').
+   * @type {Input<DrawerContext | undefined>}
+   */
   context = input<DrawerContext>();
 
+  /**
+   * Determines the CSS class dynamically based on the display mode specified in the context input.
+   * Handles both signal-based inputs (by calling the input function) and standard property inputs.
+   *
+   * @returns {string} The CSS class name corresponding to the current display mode, or 'default' if none is set.
+   */
   get modeClass(): string {
     // Check if 'context' is a function (signal context)
     if (typeof this.context === 'function') {
