@@ -57,6 +57,14 @@ export const routes: Routes = [
     loadComponent: () => import('./css-examples/dialogs/dialogs').then(m => m.Dialogs)
   },
   {
+    path: '3d-slider',
+    loadComponent: () => import('./css-examples/three-d-slider/three-d-slider').then(m => m.ThreeDSlider)
+  },
+  {
+    path: '3d-rotate',
+    loadComponent: () => import('./css-examples/three-d-rotate/three-d-rotate').then(m => m.ThreeDRotate)
+  },
+  {
     path: 'sub-grid',
     // Use loadComponent for lazy loading the layout container
     loadComponent: () => import('./components/sub-grid-container/sub-grid-container').then(m => m.SubGridContainer),
