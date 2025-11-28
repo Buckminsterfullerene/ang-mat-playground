@@ -3,39 +3,41 @@
   margin: 0;
 }
 
-.banner {
-  margin-top: -50px;
+.container-wrapper {
+  //margin-top: -50px;
   height: 100vh;
   overflow: hidden;
   position: relative;
 
-  &:has(.product:hover) .rock img:nth-child(1) {
+  &:has(.image-wrapper:hover) .rock img:nth-child(1) {
     transform: translateX(-50%) translateY(50px);
   }
 
-  &:has(.product:hover) .rock img:nth-child(2) {
+  &:has(.image-wrapper:hover) .rock img:nth-child(2) {
     transform: translateX(-100px) translateY(100px);
   }
 
-  &:has(.product:hover) .rock img:nth-child(3) {
+  &:has(.image-wrapper:hover) .rock img:nth-child(3) {
     transform: translateX(100px) translateY(100px);
   }
 }
 
-.product {
+.image-wrapper {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 170px;
+  //bottom: 170px;
+  bottom: 33%;
   z-index: 2;
-  width: 500px;
+  //width: 500px;
   transition: 0.7s;
 
-  .soda {
+  .pic {
     position: absolute;
     bottom: 0;
     left: calc(50%);
     transform: translateX(-50%);
+    border-radius: 50%;
   }
 
   /* Hover states for the product container and its children */
@@ -43,27 +45,27 @@
     bottom: 300px;
   }
 
-  &:hover .soda:nth-child(2) {
+  &:hover .pic:nth-child(2) {
     opacity: 1;
     --left: 500px;
   }
 
-  &:hover .soda:nth-child(1) {
+  &:hover .pic:nth-child(1) {
     opacity: 0;
     --left: 500px;
   }
 }
 
-.soda {
+.pic {
   --left: 0px;
-  background: var(--url) var(--left),
-  url(/images/mockup.png) 0 0;
+  background: var(--url) var(--left), url(/images/dragon-ball.png) 0 0;
   background-size: auto 100%;
-  width: 280px;
-  aspect-ratio: 2 / 4;
+  width: 500px;
+  //aspect-ratio: 2 / 4;
+  aspect-ratio: 2 / 2;
   background-blend-mode: multiply;
   transition: 0.8s;
-  mask-image: url(/images/mockup.png);
+  mask-image: url(/images/dragon-ball.png);
   mask-size: auto 100%;
 
   &:nth-child(2) {
@@ -71,49 +73,15 @@
   }
 }
 
-.rock {
-  position: absolute;
-  inset: 0 0 0 0;
-  width: 100%;
-  pointer-events: none;
-
-  img:nth-child(1) {
-    position: absolute;
-    height: 170px;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 30px;
-    transition: 0.7s;
-    z-index: 1;
-  }
-
-  img:nth-child(2) {
-    position: absolute;
-    height: 50%;
-    left: 0;
-    bottom: 0;
-    transition: 0.7s;
-  }
-
-  img:nth-child(3) {
-    position: absolute;
-    height: 100%;
-    right: 0;
-    bottom: -100px;
-    rotate: -25deg;
-    transition: 0.7s;
-  }
-}
-
 /* Media Queries are placed at the root level of the element they modify to remain valid standard CSS nesting */
 @media screen and (max-width: 1023px) {
-  .soda {
+  .pic {
     width: 400px;
   }
 }
 
 @media screen and (max-width: 767px) {
-  .soda {
+  .pic {
     width: 250px;
   }
 }
