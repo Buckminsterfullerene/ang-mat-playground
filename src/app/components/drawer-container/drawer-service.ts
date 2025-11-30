@@ -5,13 +5,11 @@ import { DrawerConfig } from './drawer-container-interface';
   providedIn: 'root', // Provided in root so it's a singleton across the app
 })
 export class DrawerService {
-  // A signal to track the drawer's open state
   #isDrawerOpen = signal(false);
   #elementBeforeDrawerOpened: HTMLElement | null = null;
-  // Expose a readable signal state
   readonly isOpen = this.#isDrawerOpen.asReadonly();
 
-  // This signal holds the *type* of component we want to display
+  // This signal holds the *type* of component we want to display. This is the "injected" component.
   #componentToRender = signal<Type<unknown> | null>(null);
   readonly currentComponent = this.#componentToRender.asReadonly();
 
@@ -32,8 +30,12 @@ export class DrawerService {
   open(componentType: Type<unknown>, config: DrawerConfig): void {
     // Enforce a required config object
     untracked(() => {
+      const finalConfig: DrawerConfig = {
+        disableClose: false, // Defaulting it to false here
+        ...config
+      };
       this.#componentToRender.set(componentType);
-      this.#config.set(config); // Set the configuration
+      this.#config.set(finalConfig); // Set the configuration
     });
 
     this.#elementBeforeDrawerOpened = document.activeElement as HTMLElement | null;

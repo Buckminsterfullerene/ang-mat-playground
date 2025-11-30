@@ -7,7 +7,7 @@ import {
   Type,
   viewChild,
   ViewContainerRef,
-  untracked, ComponentRef, Renderer2, signal,
+  untracked, ComponentRef, Renderer2, signal, computed,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,6 +21,11 @@ import { DrawerConfig } from './drawer-container-interface';
   imports: [CommonModule, MatButtonModule, MatIconModule, CdkTrapFocus], // Add CdkTrapFocus to imports
   templateUrl: './drawer-container.html',
   styleUrls: ['./drawer-container.scss'],
+  host: {
+    '[class.glass-effect]': 'hasGlassEffect()',
+    // Bind the keydown.escape event to the component's method
+    '(document:keydown.escape)': 'handleEscapeKey($event)',
+  },
 })
 export class DrawerContainer implements OnInit {
   #drawerService = inject(DrawerService);
@@ -47,6 +52,8 @@ export class DrawerContainer implements OnInit {
 
   // A CSS transition time. Must match the transition duration in drawer-container.scss
   readonly #TRANSITION_DURATION_MS = 300;
+
+  hasGlassEffect = computed(() => this.#drawerService.getConfig()?.glassEffect ?? false);
 
   constructor() {
     // Primary effect that manages DOM presence and the CSS class timing
@@ -126,6 +133,23 @@ export class DrawerContainer implements OnInit {
    */
   closeDrawer(): void {
     this.#drawerService.close();
+  }
+
+  /**
+   * Handles the keyboard event for the Escape key press on the document level.
+   * Closes the drawer if it is currently open and stops event propagation.
+   *
+   * This listener is attached to the document via the component's `host` metadata property.
+   *
+   * @param event The generic DOM Event object associated with the keydown action.
+   */
+  handleEscapeKey(event: Event): void {
+    // Check signal value inside the function
+    if (this.serviceIsOpen()) {
+      this.closeDrawer();
+      // It's still good practice to stop propagation in modular UI elements
+      event.stopPropagation();
+    }
   }
 
   /**

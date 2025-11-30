@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
+
+export interface TempExampleData {
+  items: string[];
+}
 
 @Component({
   selector: 'app-temp-example',
@@ -7,9 +11,9 @@ import { Component } from '@angular/core';
   styleUrl: './temp-example.scss',
 })
 export class TempExample {
+  data = input<TempExampleData | undefined>();
   listData: string[] = this.createRandomStringArray(3, 15);
   constructor() {
-
   }
 
   /**

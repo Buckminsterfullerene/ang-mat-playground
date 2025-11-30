@@ -1,3 +1,13 @@
+// Add glass effect styles when the host has the 'glass-effect' class
+:host(.glass-effect) {
+  .drawer-container {
+    // Glass effect
+    backdrop-filter: blur(8px);
+    // The background color is the color of the glass.  Change it if you want a color tint.
+    background-color: rgba(128, 128, 128, 0.219);
+  }
+}
+
 .drawer-overlay {
   position: fixed;
   top: 0;

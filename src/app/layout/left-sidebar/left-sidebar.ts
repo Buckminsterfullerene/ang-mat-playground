@@ -35,8 +35,9 @@ export class LeftSidebar {
         { label: 'Video Examples', icon: 'video_camera_back', link: '/video-examples' },
         { label: 'Glass Examples', icon: 'glass_cup', link: '/glass-examples' },
         { label: 'Dialogs Examples', icon: 'dialogs', link: '/dialogs-examples' },
-        { label: '3D Slider', icon: 'dialogs', link: '/3d-slider' },
-        { label: '3D Rotate', icon: 'dialogs', link: '/3d-rotate' },
+        { label: '3D Slider', icon: 'autorenew', link: '/3d-slider' },
+        { label: '3D Rotate', icon: '3d_rotation', link: '/3d-rotate' },
+        { label: 'Shop', icon: 'shopping_bag', link: '/shop' },
       ]
     },
     {

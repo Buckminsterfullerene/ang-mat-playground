@@ -7,19 +7,25 @@ export interface DrawerContext {
  * Configuration for opening a drawer.
  */
 export interface DrawerConfig<D = any> {
-  /** The title for the drawer header. */
+  // The title for the drawer header.
   title: string;
 
-  /** Whether the title should be visually hidden (screen readers only). Defaults to false. */
+  // Whether the title should be visually hidden (screen readers only). Defaults to false.
   hideTitle?: boolean;
 
-  /** Whether to show the backdrop overlay. Defaults to true. */
+  // Whether to show the backdrop overlay. Defaults to true.
   showOverlay?: boolean;
 
-  /** Width of the drawer (e.g., '300px', '50%'). */
+  // Width of the drawer (e.g., '300px', '50%').
   width?: string;
 
-  /** Data to pass to the dynamically created component. */
+  // Data to pass to the dynamically created component.
   data?: D;
+
+  // Adds a glassmorphism effect to the background of the CSS class `drawer-container`. Defaults to false.
+  glassEffect?: boolean;
+
+  // Prevents closing on backdrop click Defaults to false.
+  disableClose?: boolean;
 }
 

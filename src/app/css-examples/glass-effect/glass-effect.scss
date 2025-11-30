@@ -25,15 +25,18 @@
   text-align: justify;
   line-height: 185%;
 
-  // Glass effect
-  backdrop-filter: blur(8px);
-  // The background color is the color of the glass.  Change it if you want a color tint.
-  background-color: rgba(255, 255, 255, 0.219);
   // border effect: apply to top and left sides to create light source effect
   border-top: 2px solid rgba(255, 255, 255, 0.4);
   border-left: 2px solid rgba(255, 255, 255, 0.3);
   // shadow effect: make it look "weak" since it's glass
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.089);
+
+  &.glass-effect {
+    // Glass effect
+    backdrop-filter: blur(8px);
+    // The background color is the color of the glass.  Change it if you want a color tint.
+    background-color: rgba(128, 128, 128, 0.219);
+  }
 }
 
 h1 {

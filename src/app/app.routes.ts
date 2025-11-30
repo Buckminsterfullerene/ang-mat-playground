@@ -65,6 +65,10 @@ export const routes: Routes = [
     loadComponent: () => import('./css-examples/three-d-rotate/three-d-rotate').then(m => m.ThreeDRotate)
   },
   {
+    path: 'shop',
+    loadComponent: () => import('./css-examples/shop/shop').then(m => m.Shop)
+  },
+  {
     path: 'sub-grid',
     // Use loadComponent for lazy loading the layout container
     loadComponent: () => import('./components/sub-grid-container/sub-grid-container').then(m => m.SubGridContainer),

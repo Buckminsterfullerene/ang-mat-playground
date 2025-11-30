@@ -1,6 +1,8 @@
 @if (isDomPresent()) {
   <!-- Overlay applies 'open' class for CSS transition -->
-  <div class="drawer-overlay" (click)="closeDrawer()" [class.open]="isCssOpen()"></div>
+  <div class="drawer-overlay"
+       (click)="getConfig()?.disableClose !== false ? closeDrawer() : null"
+       [class.open]="isCssOpen()"></div>
 
   <div #drawerContainerElement
        class="drawer-container"

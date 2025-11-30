@@ -1,7 +1,22 @@
-<ul>
-  @for (item of listData; track item) {
-    <li>
-      <a href="#"><strong>Item {{ $index + 1 }}:</strong> {{ item }}</a>
-    </li>
+<!--<ul>-->
+<!--  @for (item of listData; track item) {-->
+<!--    <li>-->
+<!--      <a href="#"><strong>Item {{ $index + 1 }}:</strong> {{ item }}</a>-->
+<!--    </li>-->
+<!--  }-->
+<!--</ul>-->
+
+@if (data()) {
+  @if (data()!.items.length) {
+    <ul>
+      <!-- And use data()!.items directly in the @for loop -->
+      @for (item of data()!.items; track item) {
+        <li><a href="#"><strong>{{ item }}</strong></a></li>
+      }
+    </ul>
+  } @else {
+    <p>No items found in the list.</p>
   }
-</ul>
+} @else {
+  <p>No data configuration provided for the drawer.</p>
+}
