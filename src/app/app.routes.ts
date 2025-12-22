@@ -65,8 +65,8 @@ export const routes: Routes = [
     loadComponent: () => import('./css-examples/three-d-rotate/three-d-rotate').then(m => m.ThreeDRotate)
   },
   {
-    path: 'shop',
-    loadComponent: () => import('./css-examples/shop/shop').then(m => m.Shop)
+    path: 'popover-api',
+    loadComponent: () => import('./css-examples/popover-api-examples/popover-api-examples').then(m => m.PopoverApiExamples)
   },
   {
     path: 'sub-grid',

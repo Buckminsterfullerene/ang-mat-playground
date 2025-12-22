@@ -1,0 +1,116 @@
+<section>
+  <div class="example">
+    <h3>Popover Modal</h3>
+    <div class="example-card">
+      <!-- Native Popover API: No TS code needed for this toggle -->
+      <button popovertarget="popover-modal" class="btn primary">Open Modal</button>
+    </div>
+    <p class="example-desc">
+      Non-blocking modal using <code>popover</code> API. Click outside to dismiss.
+    </p>
+    <div id="popover-modal" popover class="popover-modal">
+      <h3>Popover Modal</h3>
+      <p>This modal uses the Popover API. Unlike showModal(), it does not block page interaction.</p>
+      <div class="dialog-actions">
+        <button popovertarget="popover-modal" popovertargetaction="hide" class="btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="example">
+    <h3>Action Menu</h3>
+    <div class="example-card">
+      <div class="toolbar">
+        <button popovertarget="action-menu" class="btn menu-trigger">Actions</button>
+        <div id="action-menu" popover class="menu-popover">
+          <button type="button" class="btn menu-item">Edit</button>
+          <button type="button" class="btn menu-item">Share</button>
+          <button type="button" class="btn menu-item">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="example">
+    <h3>Toast Notification</h3>
+    <div class="example-card">
+      <!-- Explicitly set type="button" to avoid any form-interception issues -->
+      <button type="button" (click)="triggerNextToast()" class="btn">Show Toast</button>
+    </div>
+
+    <div id="toast-container">
+      @for (toast of activeToasts(); track toast.id; let i = $index) {
+        <div
+          #toastEl
+          [id]="'toast-' + toast.id"
+          popover="manual"
+          class="toast"
+          [style.bottom.px]="40 + (i * 70)">
+          {{ toast.message }}
+        </div>
+      }
+    </div>
+  </div>
+
+
+  <div class="example">
+    <h3>Tooltip</h3>
+    <div class="example-card">
+      <button
+        class="btn"
+        style="anchor-name: --trigger-btn;"
+        (mouseenter)="toggleTooltip(true)"
+        (mouseleave)="toggleTooltip(false)"
+        (focus)="toggleTooltip(true)"
+        (blur)="toggleTooltip(false)">
+        Hover me
+      </button>
+      <div #tooltip popover="hint" class="tooltip">
+        This is helpful information about the button.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Dialog Examples</h2>
+  <div class="example">
+    <h3>Confirmation Dialog</h3>
+    <div class="example-card">
+      <button (click)="openConfirm()" class="btn danger">Delete Item</button>
+    </div>
+    <dialog #confirmDialog class="dialog">
+      <h3>Delete Item?</h3>
+      <p>This action cannot be undone. Are you sure?</p>
+      <div class="dialog-actions">
+        <button (click)="handleConfirmAction(false)" class="btn">Cancel</button>
+        <button (click)="handleConfirmAction(true)" class="btn danger">Delete</button>
+      </div>
+    </dialog>
+  </div>
+
+  <div class="example">
+    <h3>Form Dialog</h3>
+    <div class="example-card">
+      <button (click)="openLogin()" class="btn primary">Login</button>
+    </div>
+    <dialog #loginDialog class="dialog">
+      <h3>Login</h3>
+      <!-- method="dialog" automatically closes the dialog on submit -->
+      <form method="dialog" (submit)="handleLoginSubmit()">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <div class="dialog-actions">
+          <button type="button" (click)="loginDialog.close()" class="btn">Cancel</button>
+          <button type="submit" class="btn primary">Login</button>
+        </div>
+      </form>
+    </dialog>
+  </div>
+</section>

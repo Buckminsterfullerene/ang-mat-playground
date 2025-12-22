@@ -1,124 +1,186 @@
-/* general styling */
+/**
+ * OKLCH provides perceptually uniform colors and better gamut support.
+ */
 :host {
-  --surface-0: hsl(229, 41%, 5%);
-  --surface-1: hsl(229, 25%, 12%);
-  --surface-2: hsl(234, 26%, 16%);
-  --text-1: hsl(229, 12%, 100%);
-  --text-2: hsl(229, 12%, 66%);
-  --required: hsl(321, 32%, 56%);
-  --accent: hsl(262, 84%, 52%);
-  --border: 1px solid hsl(229, 22%, 19%);
+  /* Surface colors scaled by Lightness (L) */
+  --surface-0: oklch(0.12 0.02 240); // Base Dark
+  --surface-1: oklch(0.18 0.03 240); // Form Background
+  --surface-2: oklch(0.25 0.03 240); // Input Background
+
+  /* Text colors */
+  --text-1: oklch(0.98 0.01 240);
+  --text-2: oklch(0.75 0.02 240);
+
+  /* Accents */
+  --accent: oklch(0.55 0.22 275);   // Vibrant Violet
+  --required: oklch(0.60 0.15 350); // Pinkish Red
+
+  /* Borders & Shadows */
+  --border-color: oklch(0.35 0.03 240);
+  --border: 1px solid var(--border-color);
+
+  display: block;
+  min-block-size: 100dvh; // Dynamic Viewport Height
+  background-color: var(--surface-0);
+  color: var(--text-1);
+  font-family: system-ui, sans-serif;
 }
 
+/* RESET & BASE TYPOGRAPHY */
 * {
   box-sizing: border-box;
-  margin: 0;
 }
 
 h1 {
   font-weight: 300;
-  line-height: 1;
-  /*
-   Responsive font size using clamp.
-   The clamp() CSS function allows you to set a value within a specified range, defined by a minimum, a preferred, and a
-   maximum value. This is particularly useful for creating fluid and responsive designs without relying on extensive media queries.
-   This can be applied to font sizes, widths, heights, margins, paddings, and more.
-   */
-  font-size: clamp(2rem, 4vw, 4rem); /* min: 2rem, preferred: 4vw, max: 4rem */
+  line-height: 1.1;
+  /* Fluid typography using clamp */
+  font-size: clamp(2rem, 4vi, 4rem);
+  margin-block-end: 1.5rem;
 }
 
 a {
-  color: hsl(from var(--accent) h s 80%);
+  /* Relative Color Syntax (RCS): Derives link color from accent with increased lightness */
+  color: oklch(from var(--accent) 0.85 c h);
+  text-underline-offset: 0.2ex;
+
+  &:hover {
+    color: oklch(from var(--accent) 0.95 c h);
+  }
 }
 
-label {
-  text-transform: uppercase;
-  font-size: 1rem;
-}
-
-.fine-print {
-  font-size: 0.925rem;
-  text-transform: revert;
-  line-height: 1.4;
-}
-
+/* FORM CONTAINER */
 .contact-form {
   display: grid;
-  gap: 1rem;
+  gap: 2rem;
 
   background-color: var(--surface-1);
   padding: 3rem;
   border-radius: 24px;
-  width: min(100% - 4rem, 1200px);
+
+  /* Logical width and centering */
+  inline-size: min(100% - 4rem, 1200px);
   margin-inline: auto;
-}
 
-button {
-  cursor: pointer;
-  background-color: var(--accent);
-  color: var(--text-1);
-  padding: 1em 1.5em;
-  border: 0;
-  border-radius: 16px;
-
-  &:hover,
-  &:focus-visible {
-    background-color: hsl(from var(--accent) h s 30%);
-  }
-}
-
-input,
-button,
-select,
-textarea {
-  font: inherit;
+  box-shadow: 0 20px 40px oklch(0% 0 0 / 0.4);
 }
 
 form {
   display: grid;
-  gap: 1rem;
+  gap: 1.5rem;
 
   @media (width > 720px) {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
+/* FORM ELEMENTS */
 .form-group {
   display: grid;
-  gap: 0.5cap;
+  gap: 0.5rem;
+
+  /* Layout logic for fine print checkboxes */
+  &:has(.fine-print) {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75ch;
+  }
 }
 
 label {
   text-transform: uppercase;
-  font-size: 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--text-2);
 
-  text-box-trim: trim-both;
+  /* Modern Text Metrics Trimming (Removes leading/trailing space from font) */
+  text-box-trim: both;
   text-box-edge: cap alphabetic;
+
+  &:has(+ :required)::after {
+    content: " *";
+    color: var(--required);
+  }
 }
 
-input {
+input,
+select,
+textarea {
+  font: inherit;
   background: var(--surface-2);
   color: var(--text-1);
   border: var(--border);
-  border-radius: 16px;
-  padding: 1ex 2ex;
+  border-radius: 12px;
+  padding: 0.8rem 1.2rem;
 
+  /* Native selection/caret colors */
   accent-color: var(--accent);
-  caret-color: yellow;
+  caret-color: var(--accent);
+
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px oklch(from var(--accent) l c h / 0.2);
+  }
+
+  /* Auto-resize textareas as the user types */
+  &[type="text"], textarea {
+    field-sizing: content;
+  }
 }
 
-input:not([type="checkbox"], [type="radio"]) {
-  width: 100%;
+/* Standardize width for non-choice inputs */
+input:not([type="checkbox"], [type="radio"]),
+select,
+textarea {
+  inline-size: 100%;
 }
 
-.form-group:has(.fine-print) {
-  grid-column: 1 / -1;
+/* BUTTON STYLING */
+button {
+  all: unset; // Clean slate
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  display: flex;
-  gap: 0.5ch;
+  background-color: var(--accent);
+  color: oklch(100% 0 0); // Pure white in OKLCH
+
+  padding-block: 1rem;
+  padding-inline: 2rem;
+  border-radius: 14px;
+  font-weight: 600;
+  text-align: center;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s active;
+
+  /* Relative Color Syntax for Hover: Darken the accent color */
+  &:hover,
+  &:focus-visible {
+    background-color: oklch(from var(--accent) calc(l - 0.1) c h);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  /* Specific form alignment */
+  .contact-form & {
+    justify-self: start;
+    margin-block-start: 1rem;
+  }
 }
 
-.contact-form button {
-  justify-self: start;
+.fine-print {
+  font-size: 0.925rem;
+  color: var(--text-2);
+  line-height: 1.5;
+  text-wrap: pretty; // avoid orphans
 }
-

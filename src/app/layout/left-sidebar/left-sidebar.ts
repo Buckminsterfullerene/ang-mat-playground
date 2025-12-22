@@ -24,6 +24,7 @@ export class LeftSidebar {
       label: 'CSS',
       icon: 'css',
       subItems: [
+        { label: 'Popover API', icon: 'toast', link: '/popover-api' },
         { label: 'Carousel', icon: 'view_carousel', link: '/carousel', external: true },
         { label: 'CSS Grid', icon: 'auto_awesome_mosaic', link: '/css-grid' },
         { label: 'CSS Menu Button this is a very long label', icon: 'lightbulb', link: '/css-menu-button' },
@@ -37,7 +38,6 @@ export class LeftSidebar {
         { label: 'Dialogs Examples', icon: 'dialogs', link: '/dialogs-examples' },
         { label: '3D Slider', icon: 'autorenew', link: '/3d-slider' },
         { label: '3D Rotate', icon: '3d_rotation', link: '/3d-rotate' },
-        { label: 'Shop', icon: 'shopping_bag', link: '/shop' },
       ]
     },
     {

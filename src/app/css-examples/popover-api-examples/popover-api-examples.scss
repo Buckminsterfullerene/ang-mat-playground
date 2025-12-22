@@ -1,0 +1,306 @@
+:host {
+  /* Surface Colors */
+  --popover-bg: oklch(0.25 0.04 245);          /* Deep Slate */
+  --popover-text: oklch(0.92 0.02 245);        /* High-contrast Blue-Gray */
+  --popover-text-light: oklch(0.98 0.01 245);  /* Near White */
+  --popover-shadow: 0 25px 50px oklch(0% 0 0 / 0.5);
+  --popover-radius: 1rem;
+
+  /* Animation Timings */
+  --transition-speed: 250ms;
+  --transition-easing: cubic-bezier(0.3, 0, 0, 1); // Snappy modern easing
+
+  --popover-closed-opacity: 0;
+  --popover-closed-scale: 0.95;
+
+  display: block;
+  padding: 1rem;
+}
+
+/**
+ * SHARED SURFACE PATTERN
+ * Used for Modals, Menus, and Dialogs.
+ * Placeholder (%) ensures the CSS is grouped rather than duplicated.
+ */
+%surface-base {
+  padding: 1.5rem;
+  border: none;
+  border-radius: var(--popover-radius);
+  background: var(--popover-bg);
+  color: var(--popover-text);
+  box-shadow: var(--popover-shadow);
+
+  /**
+   * allow-discrete: standard to allow 'display' and 'overlay' properties
+   * to participate in transitions (essential for Native Popovers/Dialogs).
+   */
+  transition:
+    opacity var(--transition-speed) var(--transition-easing),
+    transform var(--transition-speed) var(--transition-easing),
+    overlay var(--transition-speed) allow-discrete,
+    display var(--transition-speed) allow-discrete;
+}
+
+/**
+ * MODALS AND DIALOGS
+ * Styling for Popover Modal, Delete Dialog, and Login Dialog.
+ */
+.popover-modal, .dialog {
+  @extend %surface-base;
+  max-inline-size: 400px; // Logical 'width'
+  inline-size: 90%;
+  margin: auto; // Centers native dialogs in viewport
+
+  /* Initial Closed State */
+  opacity: var(--popover-closed-opacity);
+  transform: scale(var(--popover-closed-scale)) translateY(-10px);
+
+  /* Handles both native [popover] and native <dialog [open]> */
+  &:popover-open, &[open] {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+
+    /**
+     * @starting-style: Defines the state the element transitions FROM
+     * the moment it is opened.
+     */
+    @starting-style {
+      opacity: var(--popover-closed-opacity);
+      transform: scale(var(--popover-closed-scale)) translateY(-10px);
+    }
+
+    &::backdrop {
+      background: oklch(10% 0.05 245 / 0.7);
+      backdrop-filter: blur(8px);
+
+      @starting-style {
+        background: transparent;
+        backdrop-filter: blur(0px);
+      }
+    }
+  }
+}
+
+/**
+ * ACTION MENU (Native Anchor Positioning)
+ */
+.menu-popover {
+  @extend %surface-base;
+
+  /* CRITICAL: Must be display: none when closed to prevent overlay blocking */
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0.5rem;
+
+  /* Chrome Anchor Logic */
+  position-anchor: --menu-trigger;
+  inset: auto;
+  top: anchor(bottom);
+  left: anchor(left);
+  margin-block-start: 8px;
+  min-inline-size: 180px;
+
+  /* Animation */
+  opacity: 0;
+  transform: translateY(-8px);
+  transition:
+    opacity var(--transition-speed) var(--transition-easing),
+    transform var(--transition-speed) var(--transition-easing),
+    overlay var(--transition-speed) allow-discrete,
+    display var(--transition-speed) allow-discrete;
+
+  &:popover-open {
+    display: flex; // Switch to flex when open
+    opacity: 1;
+    transform: translateY(0);
+
+    @starting-style {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
+
+  /**
+   * MENU ITEM STYLES
+   * Nested here for clear encapsulation.
+   */
+  .menu-item {
+    /* Reset standard button (pill) styling */
+    all: unset;
+    display: block;
+    box-sizing: border-box;
+    inline-size: 100%; // Fill width of menu
+
+    /* List item appearance */
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    color: var(--popover-text);
+    font-size: 0.9rem;
+    cursor: pointer;
+
+    /* Modern interactive hover */
+    transition: background 150ms ease;
+
+    &:hover {
+      /* OKLCH alpha-based hover (10% white overlay) */
+      background: oklch(100% 0 0 / 0.1);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--md-sys-color-outline, oklch(0.5 0 0));
+      outline-offset: -2px;
+    }
+  }
+}
+
+.menu-trigger { anchor-name: --menu-trigger; }
+
+/**
+ * TOAST NOTIFICATIONS
+ */
+#toast-container {
+  /*
+  pointer-events: 'none' ensures the wrapper doesn't block clicks on the main UI.    This is because the toast button is
+  next to the 'Actions' button, and we want to ensure clicks pass through the 'Actions' menu container. This may not be
+  needed if used in other pages.  This seems to be a unique case due to the layout of this example.
+  */
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2147483647; // Topmost layer
+}
+
+.toast {
+  pointer-events: auto; // Re-enable clicks for the toasts themselves
+  position: fixed;
+  inset: auto;           // Reset native popover centering
+  inset-inline: 0;      // Logical left/right: 0
+  margin-inline: auto;  // Center horizontally
+  inline-size: fit-content;
+
+  padding: 0.75rem 1.5rem;
+  background: var(--md-sys-color-inverse-surface, oklch(0.45 0.05 245));
+  color: var(--md-sys-color-inverse-on-surface, oklch(0.98 0.01 245));
+  border-radius: 2rem;
+  box-shadow: 0 10px 30px oklch(0% 0 0 / 0.3);
+  border: none;
+
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 300ms var(--transition-easing) allow-discrete;
+
+  &:popover-open {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    @starting-style { opacity: 0; transform: translateY(20px); }
+  }
+}
+
+/**
+ * BUTTON SYSTEM (Material Design 3 Logic)
+ */
+.btn {
+  /* Base Tokens */
+  --btn-bg: var(--md-sys-color-primary-container, oklch(0.9 0.05 245));
+  --btn-on-bg: var(--md-sys-color-on-primary-container, oklch(0.2 0.05 245));
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.5rem;
+  border-radius: 100px;
+  border: none;
+  background-color: var(--btn-bg);
+  color: var(--btn-on-bg);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 200ms ease, transform 150ms ease;
+
+  &:hover {
+    /**
+     * Relative Color Syntax: Takes the existing bg and lightens it by 0.05.
+     */
+    background-color: oklch(from var(--btn-bg) calc(l + 0.05) c h);
+  }
+
+  &:active { transform: scale(0.97); }
+
+  &.primary {
+    --btn-bg: var(--md-sys-color-primary, oklch(0.4 0.15 245));
+    --btn-on-bg: var(--md-sys-color-on-primary, oklch(0.98 0.01 245));
+  }
+
+  &.danger {
+    /* Hardcoded red fallback if MD3 tokens are missing */
+    --btn-bg: var(--md-sys-color-error, oklch(0.55 0.22 25)) !important;
+    --btn-on-bg: var(--md-sys-color-on-error, oklch(0.98 0.01 25)) !important;
+
+    &:hover {
+      background-color: oklch(from var(--btn-bg) calc(l + 0.08) c h) !important;
+    }
+  }
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-block-start: 1.5rem;
+}
+
+.toolbar {
+  display: flex;
+  gap: 12px;
+  padding: 1rem;
+  background: var(--md-sys-color-surface-container);
+  border-radius: 12px;
+}
+
+/* TOOLTIP STYLES */
+.tooltip {
+  /* RESET: Modern Popovers need inset: auto to clear UA centering */
+  inset: auto;
+  position: fixed;
+
+  /* TETHERING: Glue to the button */
+  position-anchor: --trigger-btn;
+
+  /* Modern Positioning: 'top' places it centered above the button */
+  /* If 'top' is not supported, 'top: anchor(top)' is the fallback */
+  position-area: top;
+
+  /* Add a gap between the button and the tooltip */
+  margin: 0 0 8px;
+
+  /* Appearance (Your clean minimalist style) */
+  background: var(--popover-bg, oklch(0.25 0.04 245));
+  color: var(--popover-text, oklch(0.92 0.02 245));
+  padding: 8px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px oklch(0% 0 0 / 0.2);
+  border: none;
+  font-size: 0.875rem;
+  pointer-events: none;
+
+  /* Animations */
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 200ms var(--transition-easing),
+    transform 200ms var(--transition-easing),
+    overlay 200ms allow-discrete,
+    display 200ms allow-discrete;
+
+  &:popover-open {
+    opacity: 1;
+    transform: translateY(0);
+
+    @starting-style {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+  }
+}
+
