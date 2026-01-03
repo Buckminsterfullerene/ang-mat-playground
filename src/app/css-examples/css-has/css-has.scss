@@ -1,0 +1,163 @@
+/*
+Why Angular Component Fails when the selector is div:has(h1) instead of section > div:has(h1).
+Angular's default Emulated encapsulation rewrites your selectors by appending unique attributes (like _ngcontent-c1) to
+your elements. This process can inadvertently change the specificity calculation or how the browser matches them.
+
+1. Selector Transformation: Angular transforms your code into something like this:
+   * section > div → section[_ngcontent-c1] > div[_ngcontent-c1] (Score: 0-2-2)
+   * div:has(h1) → div[_ngcontent-c1]:has(h1[_ngcontent-c1]) (Score: 0-2-2)
+2. Attribute Specificity: Each attribute selector ([...]) adds 10 points to the middle column of your specificity score.
+3. The "Hidden" Parent Conflict: Because section > div targets the child div via a parent that also has an Angular attribute,
+    it may gain higher relevance in the browser's matching engine than the standalone div:has() selector, especially if
+    the internal structure of the :has() pseudo-class is compiled differently by Angular's pre-processor.
+
+Why the Works in regular CSS:
+The CSS follows the standard Cascade rules:
+1. section > div and div:has(h1) both have a specificity score of 0-0-2.
+2. In a tie, the rule written later in the file wins.
+3. Since the :has() rules are at the bottom, they successfully override the base section > div background.
+*/
+
+section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+section > div {
+  background-color: oklch(96.34% 0.012 216.31);
+  padding: 1rem;
+  box-shadow: 0 0 1rem oklch(0 0 0 / 0.15);
+}
+
+section > div:has(h1) {
+  background-color: hotpink;
+}
+
+section > div:has(p) {
+  background-color: limegreen;
+}
+
+section > div:has(p:empty) {
+  background: firebrick;
+}
+
+section > div:has(.fancy-paragraph) {
+  color: rebeccapurple;
+  background: white;
+}
+
+section > div:has(> a) {
+  background: steelblue;
+}
+
+/* CARD STYLES */
+.card-wrapper {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  padding: 3rem;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  align-items: start;
+
+  * {
+    box-sizing: border-box;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+}
+
+.card {
+  box-shadow: 0 0 1rem oklch(0 0 0 / 0.2);
+}
+
+.card:has(.media) {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+}
+
+.card:has(.icon) {
+  padding: 1rem;
+}
+
+.card:has(.icon) > .card__content {
+  padding: 0;
+}
+
+.card__content {
+  padding: 1rem;
+}
+
+/* ARTICAL STYLES */
+.article-wrapper {
+  font-family: system-ui;
+  font-size: 1.5rem;
+  padding: 2rem;
+  background-color: oklch(0.12 0.03 230);
+  color: oklch(0.98 0.01 220);
+}
+
+article {
+  max-width: 50rem;
+  margin-inline: auto;
+}
+
+article + article {
+  border-block-start: 2px solid oklch(0.28 0.01 220);
+  margin-block-start: 4rem;
+  padding-block-start: 4rem;
+}
+
+.article__title {
+  color: oklch(0.82 0.11 275);
+  margin: 0;
+}
+
+.article__subtitle {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-block-end: 5rem;
+}
+
+.article__title:has(+ .article__subtitle) {
+  color: oklch(0.87 0.29 142);
+}
+
+.article__title:not(:has(+ .article__subtitle)) {
+  color: oklch(0.82 0.09 5);
+  margin-block-end: 5rem;
+}
+
+/* IMAGE GALLERY STYLES */
+.img-gallery-wrapper {
+  padding: 2rem;
+  /* hsl(200 50% 5%) */
+  background: oklch(0.12 0.03 230);
+}
+
+.image-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 50rem;
+  margin-inline: auto;
+}
+
+.image-gallery > img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+
+  transition: scale 350ms ease, opacity 350ms linear;
+}
+
+.image-gallery:has(img:hover) img:not(:hover) {
+  scale: 0.8;
+  opacity: 0.7;
+}
+

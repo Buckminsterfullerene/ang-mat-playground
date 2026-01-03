@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { Login } from './css-examples/login/login';
+import { CssHas } from './css-examples/css-has/css-has';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -67,6 +68,10 @@ export const routes: Routes = [
   {
     path: 'popover-api',
     loadComponent: () => import('./css-examples/popover-api-examples/popover-api-examples').then(m => m.PopoverApiExamples)
+  },
+  {
+    path: 'pseudo-class-has',
+    loadComponent: () => import('./css-examples/css-has/css-has').then(m => m.CssHas)
   },
   {
     path: 'sub-grid',
