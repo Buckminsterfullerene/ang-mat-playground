@@ -7,11 +7,12 @@
 <!--</ul>-->
 
 @if (data()) {
-  @if (data()!.items.length) {
+  @if (items().length > 0) {
     <ul>
-      <!-- And use data()!.items directly in the @for loop -->
-      @for (item of data()!.items; track item) {
-        <li><a href="#"><strong>{{ item }}</strong></a></li>
+      @for (item of items(); track item) {
+        <li>
+          <a href="#"><strong>{{ item }}</strong></a>
+        </li>
       }
     </ul>
   } @else {

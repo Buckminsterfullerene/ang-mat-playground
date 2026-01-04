@@ -183,18 +183,20 @@ export class DrawerContainer implements OnInit {
    */
   #loadDynamicComponent(componentType: Type<unknown> | null, config: DrawerConfig | null): void {
     const host = this.dynamicContentHost();
+
     if (componentType && host && config) {
       host.clear();
-      // Create the component instance
       const componentRef: ComponentRef<any> = host.createComponent(componentType);
 
-      if (componentType.name === 'HeaderNavItems') {
-        componentRef.setInput('context', { displayMode: 'column' });
+      // Modern Idiomatic way to pass data to dynamic components in Angular 21
+      if (config.data) {
+        // This works for both Signal inputs and decorator @Inputs
+        componentRef.setInput('data', config.data);
       }
 
-      // Pass data if available
-      if (config.data && 'data' in componentRef.instance) {
-        componentRef.instance.data = config.data;
+      // Example of your other conditional logic using the same pattern
+      if (componentType.name === 'HeaderNavItems') {
+        componentRef.setInput('context', { displayMode: 'column' });
       }
     }
   }

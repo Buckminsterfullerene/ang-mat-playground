@@ -33,6 +33,8 @@
   grid-area: left-sidebar;
   border-right: 1px solid var(--line-clr);
   //background-color: var(--base-clr);
+  display: flex;
+  flex-direction: column;
 }
 
 .right-sidebar-container {

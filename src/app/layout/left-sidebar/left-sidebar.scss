@@ -1,44 +1,43 @@
-/* Define SCSS variables locally for this component to avoid global conflicts */
 :host {
-  --base-clr: #11121a;
-  --line-clr: #42434a;
-  --hover-clr: #222533;
-  --text-clr: #e6e6ef;
-  --accent-clr: #5e63ff;
-  --secondary-text-clr: #b0b3c1;
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--mat-sys-surface-container-low);
 }
 
-// Ensure proper box modeling for all internal elements
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+aside {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Use the element selector 'nav' as there is only one in the component template */
 nav {
-  height: 100%;
-  width: 250px;
+  flex: 1 1 auto;
+  width: 100%;
   padding: 5px 1em;
-  background-color: var(--base-clr);
-  border-right: 1px solid var(--line-clr);
-  position: sticky;
-  top: 0;
-  align-self: start;
+
+  /* Prevent 'scrollbar-gutter' from shifting content when it appears */
+  scrollbar-gutter: stable;
+
   transition: width 300ms ease-in-out, padding 300ms ease-in-out;
   overflow-y: auto;
   overflow-x: hidden;
 
   &.close {
     padding: 5px;
-    width: 60px;
+    width: 3.75rem;
+    /* In 'close' mode, hide the scrollbar to keep it clean */
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
   }
 
   ul {
     list-style: none;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    padding-inline-start: 0;
+    min-height: min-content;
 
     > li:first-child {
       display: flex;
@@ -47,7 +46,7 @@ nav {
 
       .logo {
         font-weight: 600;
-        color: var(--text-clr);
+        color: var(--mat-sys-on-surface);
         padding: .85em;
       }
     }
@@ -66,28 +65,28 @@ nav {
     border-radius: 0.5em;
     padding: 0.85em;
     text-decoration: none;
-    color: var(--text-clr);
+    color: var(--mat-sys-on-surface-variant);
     display: flex;
     align-items: center;
     gap: 1em;
     cursor: pointer;
 
     &:hover {
-      background-color: var(--hover-clr);
+      background-color: var(--mat-sys-surface-container-high);
     }
   }
 
   .active {
-    color: var(--accent-clr);
+    color: var(--mat-sys-primary);
 
     mat-icon {
-      color: var(--accent-clr);
+      color: var(--mat-sys-primary);
     }
   }
 
   mat-icon {
     flex-shrink: 0;
-    color: var(--text-clr);
+    color: var(--mat-sys-on-surface-variant);
     transition: color 150ms ease;
   }
 
@@ -144,7 +143,7 @@ nav {
     cursor: pointer;
 
     &:hover {
-      background-color: var(--hover-clr);
+      background-color: var(--mat-sys-surface-container-high);
     }
 
     mat-icon {
@@ -163,7 +162,6 @@ nav {
     height: 60px;
     width: 100%;
     border-right: none;
-    border-top: 1px solid var(--line-clr);
     padding: 0;
     position: fixed;
     top: unset;
@@ -201,8 +199,6 @@ nav {
         box-sizing: border-box;
         height: 60px;
         width: 100%;
-        background-color: var(--hover-clr);
-        border-top: 1px solid var(--line-clr);
         display: flex;
         justify-content: center;
 

@@ -2,7 +2,7 @@ import { Injectable, signal, Type, untracked } from '@angular/core';
 import { DrawerConfig } from './drawer-container-interface';
 
 @Injectable({
-  providedIn: 'root', // Provided in root so it's a singleton across the app
+  providedIn: 'root',
 })
 export class DrawerService {
   #isDrawerOpen = signal(false);

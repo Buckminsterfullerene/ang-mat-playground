@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 
 export interface TempExampleData {
   items: string[];
@@ -13,8 +13,9 @@ export interface TempExampleData {
 export class TempExample {
   data = input<TempExampleData | undefined>();
   listData: string[] = this.createRandomStringArray(3, 15);
-  constructor() {
-  }
+  // Use a computed signal to safely extract items
+  // This avoids using data()!.items multiple times in the HTML
+  items = computed(() => this.data()?.items ?? []);
 
   /**
    * Creates an array of strings with random values.
@@ -24,18 +25,11 @@ export class TempExample {
    * @returns An array of random strings.
    */
   createRandomStringArray(length: number, stringLength: number = 10): string[] {
-    const result: string[] = [];
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-
-    for (let i = 0; i < length; i++) {
-      let randomString = '';
-      for (let j = 0; j < stringLength; j++) {
-        randomString += characters.charAt(Math.floor(Math.random() * charactersLength));
-      }
-      result.push(randomString);
-    }
-
-    return result;
+    return Array.from({ length }, () =>
+      Array.from({ length: stringLength }, () =>
+        characters.charAt(Math.floor(Math.random() * characters.length))
+      ).join('')
+    );
   }
 }

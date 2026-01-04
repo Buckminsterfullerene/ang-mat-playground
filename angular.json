@@ -28,7 +28,11 @@
                 "input": "public"
               }
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/styles"]
+            },
             "styles": [
+              "src/styles/tokens.css",
               "src/styles/material-theme/css/light.css",
               "src/styles/material-theme/css/light-hc.css",
               "src/styles/material-theme/css/light-mc.css",

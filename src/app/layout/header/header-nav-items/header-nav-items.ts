@@ -1,7 +1,9 @@
-import { Component, input } from '@angular/core';
-import { MatButton } from '@angular/material/button';
+import { Component, computed, inject, input } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { DrawerContext } from '../../../components/drawer-container/drawer-container-interface';
 import { CommonModule } from '@angular/common';
+import { Theme } from '../../theme';
+import { MatIconModule } from '@angular/material/icon';
 
 /**
  * A reusable component that renders the application's primary navigation links.
@@ -16,19 +18,28 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'header-nav-items',
   imports: [
-    MatButton,
-    CommonModule
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
   ],
   templateUrl: './header-nav-items.html',
   styleUrl: './header-nav-items.scss',
 })
 export class HeaderNavItems {
+  theme = inject(Theme);
   /**
    * An input property (signal-based) that receives configuration data
    * for how the navigation items should be displayed (e.g., 'column' or 'default').
    * @type {Input<DrawerContext | undefined>}
    */
   context = input<DrawerContext>();
+
+  // Computed signal: Reactive and clean
+  themeIcon = computed(() => this.theme.isDark() ? 'light_mode' : 'dark_mode');
+
+  toggle() {
+    this.theme.toggleTheme();
+  }
 
   /**
    * Determines the CSS class dynamically based on the display mode specified in the context input.

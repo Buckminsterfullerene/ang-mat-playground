@@ -2,4 +2,8 @@
   <a matButton href="#">Dashboard</a>
   <a matButton href="#">Settings</a>
   <a matButton href="#">Profile</a>
+  <!-- Theme Toggle Button -->
+  <button matIconButton (click)="toggle()" aria-label="Toggle theme">
+    <mat-icon [fontIcon]="themeIcon()"/>
+  </button>
 </nav>

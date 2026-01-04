@@ -1,16 +1,21 @@
 :host {
-  /* Surface Colors */
-  --popover-bg: oklch(0.25 0.04 245);          /* Deep Slate */
-  --popover-text: oklch(0.92 0.02 245);        /* High-contrast Blue-Gray */
-  --popover-text-light: oklch(0.98 0.01 245);  /* Near White */
-  --popover-shadow: 0 25px 50px oklch(0% 0 0 / 0.5);
-  --popover-radius: 1rem;
+  /* Background: Use the highest surface container for floating elements */
+  --popover-bg: var(--mat-sys-surface-container-highest);
+
+  /* Text: Use the corresponding 'on-surface' token for guaranteed contrast */
+  --popover-text: var(--mat-sys-on-surface);
+
+  /* Text Light: Use 'on-surface-variant' for secondary/de-emphasized text */
+  --popover-text-light: var(--mat-sys-on-surface-variant);
+
+  --popover-shadow: var(--app-elevation-3);
+  --popover-radius: var(--app-radius-dialog);
 
   /* Animation Timings */
   --transition-speed: 250ms;
-  --transition-easing: cubic-bezier(0.3, 0, 0, 1); // Snappy modern easing
+  --transition-easing: cubic-bezier(0.05, 0.7, 0.1, 1.0); /* M3 Emphasized Easing */
 
-  --popover-closed-opacity: 0;
+  --popover-closed-opacity: var(--app-state-closed);
   --popover-closed-scale: 0.95;
 
   display: block;
@@ -26,19 +31,21 @@
   padding: 1.5rem;
   border: none;
   border-radius: var(--popover-radius);
-  background: var(--popover-bg);
+  background-color: var(--popover-bg);
   color: var(--popover-text);
   box-shadow: var(--popover-shadow);
+
+  /* Ensure the popover respects the theme color-scheme */
+  color-scheme: light dark;
 
   /**
    * allow-discrete: standard to allow 'display' and 'overlay' properties
    * to participate in transitions (essential for Native Popovers/Dialogs).
    */
-  transition:
-    opacity var(--transition-speed) var(--transition-easing),
-    transform var(--transition-speed) var(--transition-easing),
-    overlay var(--transition-speed) allow-discrete,
-    display var(--transition-speed) allow-discrete;
+  transition: opacity var(--transition-speed) var(--transition-easing),
+              transform var(--transition-speed) var(--transition-easing),
+              overlay var(--transition-speed) allow-discrete,
+              display var(--transition-speed) allow-discrete;
 }
 
 /**
@@ -70,12 +77,19 @@
     }
 
     &::backdrop {
-      background: oklch(10% 0.05 245 / 0.7);
-      backdrop-filter: blur(8px);
+      /*
+       M3 Scrim Standard:
+       - Uses 'outline' as the anchor for theme-aware neutral color.
+       - L (Lightness) forced to 0.05 (5%) for a deep darkening effect.
+       - C (Chroma) and H (Hue) derived from the theme to keep the 'temperature' consistent.
+       - Opacity 0.4 (40%) is the standard for M3 scrims.
+      */
+      background: oklch(from var(--mat-sys-outline) 0.05 c h / var(--app-backdrop-opacity));
+      backdrop-filter: var(--app-glass-blur);
 
       @starting-style {
         background: transparent;
-        backdrop-filter: blur(0px);
+        backdrop-filter: var(--app-blur-none);
       }
     }
   }
@@ -86,6 +100,9 @@
  */
 .menu-popover {
   @extend %surface-base;
+
+  /* Menus typically use a slightly smaller radius than modals */
+  border-radius: var(--app-shape-small);
 
   /* CRITICAL: Must be display: none when closed to prevent overlay blocking */
   display: none;
@@ -104,11 +121,10 @@
   /* Animation */
   opacity: 0;
   transform: translateY(-8px);
-  transition:
-    opacity var(--transition-speed) var(--transition-easing),
-    transform var(--transition-speed) var(--transition-easing),
-    overlay var(--transition-speed) allow-discrete,
-    display var(--transition-speed) allow-discrete;
+  transition: opacity var(--transition-speed) var(--transition-easing),
+              transform var(--transition-speed) var(--transition-easing),
+              overlay var(--transition-speed) allow-discrete,
+              display var(--transition-speed) allow-discrete;
 
   &:popover-open {
     display: flex; // Switch to flex when open
@@ -134,27 +150,42 @@
 
     /* List item appearance */
     padding: 0.75rem 1rem;
-    border-radius: 8px;
+
+    /* Use extra-small for tight internal corners */
+    border-radius: var(--app-shape-extra-small);
     color: var(--popover-text);
     font-size: 0.9rem;
     cursor: pointer;
 
     /* Modern interactive hover */
-    transition: background 150ms ease;
+    //transition: background 150ms ease;
+    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
     &:hover {
-      /* OKLCH alpha-based hover (10% white overlay) */
-      background: oklch(100% 0 0 / 0.1);
+      /*
+         M3 State Layer (Hover):
+         - Use the color of the content (on-surface)
+         - Apply 8% opacity (Standard M3 hover state)
+         - OKLCH keeps the color perfectly neutral
+      */
+      background-color: oklch(from var(--mat-sys-on-surface) l c h / var(--app-opacity-hover));
+    }
+
+    &:active {
+      /* M3 Pressed State: 12% opacity */
+      background-color: oklch(from var(--mat-sys-on-surface) l c h / var(--app-opacity-pressed));
     }
 
     &:focus-visible {
-      outline: 2px solid var(--md-sys-color-outline, oklch(0.5 0 0));
-      outline-offset: -2px;
+      outline: 2px solid var(--mat-sys-outline);
+      outline-offset: -4px;
     }
   }
 }
 
-.menu-trigger { anchor-name: --menu-trigger; }
+.menu-trigger {
+  anchor-name: --menu-trigger;
+}
 
 /**
  * TOAST NOTIFICATIONS
@@ -174,27 +205,43 @@
 .toast {
   pointer-events: auto; // Re-enable clicks for the toasts themselves
   position: fixed;
-  inset: auto;           // Reset native popover centering
-  inset-inline: 0;      // Logical left/right: 0
-  margin-inline: auto;  // Center horizontally
+  inset: auto; // Reset native popover centering
+  inset-inline: 0; // Logical left/right: 0
+  margin-inline: auto; // Center horizontally
   inline-size: fit-content;
 
   padding: 0.75rem 1.5rem;
-  background: var(--md-sys-color-inverse-surface, oklch(0.45 0.05 245));
-  color: var(--md-sys-color-inverse-on-surface, oklch(0.98 0.01 245));
-  border-radius: 2rem;
-  box-shadow: 0 10px 30px oklch(0% 0 0 / 0.3);
+  /*
+     M3 Inverse Surface (2026 Idiomatic):
+     - Background: Invert the 'surface' lightness (L).
+       If surface is light (~0.98), this becomes dark (~0.2).
+     - Color: Invert the 'on-surface' lightness to match.
+  */
+  background-color: oklch(from var(--mat-sys-surface) calc(1 - l) c h);
+  color: oklch(from var(--mat-sys-on-surface) calc(1 - l) c h);
+
+  /* Toasts use the pill-shape full radius */
+  border-radius: var(--app-radius-button);
+  box-shadow: var(--app-elevation-2);
   border: none;
 
+  // Animation logic using Popover API standards
   opacity: 0;
   transform: translateY(20px);
-  transition: all 300ms var(--transition-easing) allow-discrete;
+  transition:
+    opacity 300ms var(--transition-easing) allow-discrete,
+    transform 300ms var(--transition-easing) allow-discrete,
+    display 300ms var(--transition-easing) allow-discrete;
 
   &:popover-open {
     display: block;
     opacity: 1;
     transform: translateY(0);
-    @starting-style { opacity: 0; transform: translateY(20px); }
+
+    @starting-style {
+      opacity: 0;
+      transform: translateY(20px);
+    }
   }
 }
 
@@ -203,42 +250,67 @@
  */
 .btn {
   /* Base Tokens */
-  --btn-bg: var(--md-sys-color-primary-container, oklch(0.9 0.05 245));
-  --btn-on-bg: var(--md-sys-color-on-primary-container, oklch(0.2 0.05 245));
+  --btn-bg: var(--mat-sys-secondary-container);
+  --btn-on-bg: var(--mat-sys-on-secondary-container);
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0.625rem 1.5rem;
-  border-radius: 100px;
+  border-radius: var(--app-radius-button);
   border: none;
   background-color: var(--btn-bg);
   color: var(--btn-on-bg);
+  font: var(--mat-sys-label-large); // Use theme typography if available
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 200ms ease, transform 150ms ease;
+  /* M3 Standard Easing */
+  transition:
+    background-color 200ms cubic-bezier(0.2, 0, 0, 1),
+    transform 150ms cubic-bezier(0.2, 0, 0, 1),
+    box-shadow 200ms cubic-bezier(0.2, 0, 0, 1);
 
   &:hover {
     /**
-     * Relative Color Syntax: Takes the existing bg and lightens it by 0.05.
+     * M3 State Layer (Hover):
+     * Instead of just lightening, we use OKLCH to mix in a state layer overlay.
+     * This ensures correct contrast regardless of Light or Dark mode.
      */
     background-color: oklch(from var(--btn-bg) calc(l + 0.05) c h);
+    box-shadow: var(--app-elevation-1);
   }
 
-  &:active { transform: scale(0.97); }
+  &:active {
+    transform: scale(0.97);
+    background-color: oklch(from var(--btn-bg) calc(l - 0.03) c h);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mat-sys-primary);
+    outline-offset: 2px;
+  }
 
   &.primary {
-    --btn-bg: var(--md-sys-color-primary, oklch(0.4 0.15 245));
-    --btn-on-bg: var(--md-sys-color-on-primary, oklch(0.98 0.01 245));
+    --btn-bg: var(--mat-sys-primary);
+    --btn-on-bg: var(--mat-sys-on-primary);
+
+    &:hover {
+      /* Dark mode requires slightly different hover adjustments;
+         relative syntax handles this dynamically. */
+      background-color: oklch(from var(--btn-bg) calc(l + 0.06) c h);
+    }
   }
 
   &.danger {
-    /* Hardcoded red fallback if MD3 tokens are missing */
-    --btn-bg: var(--md-sys-color-error, oklch(0.55 0.22 25)) !important;
-    --btn-on-bg: var(--md-sys-color-on-error, oklch(0.98 0.01 25)) !important;
+    --btn-bg: var(--mat-sys-error);
+    --btn-on-bg: var(--mat-sys-on-error);
 
     &:hover {
-      background-color: oklch(from var(--btn-bg) calc(l + 0.08) c h) !important;
+      background-color: oklch(from var(--btn-bg) calc(l + 0.08) c h);
+    }
+
+    &:focus-visible {
+      outline-color: var(--mat-sys-error);
     }
   }
 }
@@ -255,7 +327,11 @@
   gap: 12px;
   padding: 1rem;
   background: var(--md-sys-color-surface-container);
-  border-radius: 12px;
+  /* Use medium radius for containers like toolbars */
+  border-radius: var(--app-radius-card);
+
+  /* Subtle elevation to toolbars */
+  box-shadow: var(--app-elevation-1);
 }
 
 /* TOOLTIP STYLES */
@@ -274,12 +350,17 @@
   /* Add a gap between the button and the tooltip */
   margin: 0 0 8px;
 
-  /* Appearance (Your clean minimalist style) */
-  background: var(--popover-bg, oklch(0.25 0.04 245));
-  color: var(--popover-text, oklch(0.92 0.02 245));
+  /*
+     M3 Inverse Surface Role:
+     - Background: Derived by inverting the theme's surface lightness.
+     - Color: Derived by inverting the theme's on-surface lightness.
+     - We use OKLCH relative syntax to maintain the theme's hue and chroma.
+  */
+  background-color: oklch(from var(--mat-sys-surface) calc(1 - l) c h);
+  color: oklch(from var(--mat-sys-on-surface) calc(1 - l) c h);
   padding: 8px 16px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px oklch(0% 0 0 / 0.2);
+  border-radius: var(--app-radius-tooltip);
+  box-shadow: var(--app-elevation-1);
   border: none;
   font-size: 0.875rem;
   pointer-events: none;
@@ -288,8 +369,8 @@
   opacity: 0;
   transform: translateY(4px);
   transition:
-    opacity 200ms var(--transition-easing),
-    transform 200ms var(--transition-easing),
+    opacity 200ms cubic-bezier(0.2, 0, 0, 1),
+    transform 200ms cubic-bezier(0.2, 0, 0, 1),
     overlay 200ms allow-discrete,
     display 200ms allow-discrete;
 
