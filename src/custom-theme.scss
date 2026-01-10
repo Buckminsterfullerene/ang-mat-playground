@@ -3,6 +3,15 @@
 
 @include mat.core();
 
+// Define font family
+$font-family-primary: 'Roboto', sans-serif;
+
+// Define app-level variables bridge mixin
+@mixin app-variables() {
+  --mat-app-background-color: var(--mat-sys-surface);
+  --mat-app-text-color: var(--mat-sys-on-surface);
+}
+
 // Light Theme Definition
 $light-config: (
   color: (
@@ -11,7 +20,7 @@ $light-config: (
     tertiary: colors.$tertiary-palette
   ),
   typography: (
-    brand-family: 'Roboto, sans-serif',
+    brand-family: $font-family-primary,
     use-system-variables: true
   )
 );
@@ -22,29 +31,37 @@ $dark-config: (
     theme-type: dark,
     primary: colors.$primary-palette,
     tertiary: colors.$tertiary-palette
+  ),
+  typography: (
+    brand-family: $font-family-primary,
+    use-system-variables: true
   )
 );
 
 // Apply themes based on your body classes
 body.light {
-  // Use mat.theme to emit ALL system and component tokens
   @include mat.theme($light-config);
+  @include app-variables();
   color-scheme: light;
 }
 
 body.dark {
   @include mat.theme($dark-config);
+  @include app-variables();
   color-scheme: dark;
 }
 
 // Global defaults for body
 body {
   margin: 0;
+  min-height: 100vh;  // Fallback for browsers that do not support dvh
   min-height: 100dvh;
-  // These variables will now update automatically when the class changes
-  background-color: var(--mat-app-background-color);
-  color: var(--mat-app-text-color);
-  font: var(--mat-sys-body-medium);
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font-family: var(--app-font-family-primary, $font-family-primary);
+  font-size: var(--mat-sys-body-medium-size);
+  font-weight: var(--mat-sys-body-medium-weight);
+  line-height: var(--mat-sys-body-medium-line-height);
   transition: background-color 0.3s, color 0.3s; // Smooth transition
 }
 

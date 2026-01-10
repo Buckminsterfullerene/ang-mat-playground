@@ -1,4 +1,9 @@
 :root {
+  /* Typography - Font Families */
+  --app-font-family-primary: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --app-font-family-monospace: 'Roboto Mono', 'Courier New', monospace;
+  --app-font-family-icon: 'Material Symbols Outlined';
+
   /* Material 3 Shape Scale Defaults */
   --app-shape-none: 0px;
   --app-shape-extra-small: 4px; /* Tooltips, small popovers */
