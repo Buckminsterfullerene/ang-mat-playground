@@ -4,6 +4,7 @@ import { DrawerContext } from '../../../components/drawer-container/drawer-conta
 import { CommonModule } from '@angular/common';
 import { Theme } from '../../theme';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 
 /**
  * A reusable component that renders the application's primary navigation links.
@@ -21,6 +22,7 @@ import { MatIconModule } from '@angular/material/icon';
     CommonModule,
     MatButtonModule,
     MatIconModule,
+    MatMenuModule
   ],
   templateUrl: './header-nav-items.html',
   styleUrl: './header-nav-items.scss',

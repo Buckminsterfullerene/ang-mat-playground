@@ -2,8 +2,23 @@
   <a matButton href="#">Dashboard</a>
   <a matButton href="#">Settings</a>
   <a matButton href="#">Profile</a>
-  <!-- Theme Toggle Button -->
-  <button matIconButton (click)="toggle()" aria-label="Toggle theme">
-    <mat-icon [fontIcon]="themeIcon()"/>
+
+  <button matIconButton [matMenuTriggerFor]="menu" aria-label="Settings menu">
+    <mat-icon fontIcon="settings"/>
   </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item  (click)="toggle()">
+      <mat-icon [fontIcon]="themeIcon()"/>
+      <span aria-label="Toggle theme">@if (themeIcon() === 'dark_mode') { Dark Mode } @else { Light Mode }</span>
+    </button>
+    <button mat-menu-item disabled>
+      <mat-icon>voicemail</mat-icon>
+      <span>Check voice mail</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>notifications_off</mat-icon>
+      <span>Disable alerts</span>
+    </button>
+  </mat-menu>
+
 </nav>
