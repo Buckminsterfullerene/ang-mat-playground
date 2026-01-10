@@ -1,11 +1,11 @@
-.header-container {
+header {
   padding: 0 20px;
   height: 60px; // Fixed height for the banner
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: var(--mat-sys-primary-container);
+  box-shadow: var(--app-elevation-1);
+  background-color: var(--mat-sys-primary-container, var(--app-color-header-fallback));
 
   .logo {
     font-size: 1.5rem;

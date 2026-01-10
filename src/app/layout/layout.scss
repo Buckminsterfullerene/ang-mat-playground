@@ -1,3 +1,9 @@
+/*
+NOTE: This layout uses CSS Grid to create a responsive layout with a header, left sidebar, content area, and right sidebar.
+It is intended for the framework of the layout and should have minimal styling to avoid conflicts with component styles.
+Do not add background colors or other styles that may interfere with child components.
+ */
+
 :host {
   --line-clr: oklch(0.2857 0.0116 268.86);
   //--base-clr: #11121a;

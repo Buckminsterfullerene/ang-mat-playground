@@ -33,12 +33,6 @@
             },
             "styles": [
               "src/styles/tokens.css",
-              "src/styles/material-theme/css/light.css",
-              "src/styles/material-theme/css/light-hc.css",
-              "src/styles/material-theme/css/light-mc.css",
-              "src/styles/material-theme/css/dark.css",
-              "src/styles/material-theme/css/dark-hc.css",
-              "src/styles/material-theme/css/dark-mc.css",
               "src/custom-theme.scss",
               "src/styles.scss"
             ]

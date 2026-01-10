@@ -24,6 +24,7 @@ export class LeftSidebar {
       label: 'CSS',
       icon: 'css',
       subItems: [
+        { label: 'Ang Mat Components', icon: 'css', link: '/ang-mat-components' },
         { label: 'Popover API', icon: 'toast', link: '/popover-api' },
         { label: 'Carousel', icon: 'view_carousel', link: '/carousel', external: true },
         { label: 'CSS Grid', icon: 'auto_awesome_mosaic', link: '/css-grid' },

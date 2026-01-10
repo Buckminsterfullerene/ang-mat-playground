@@ -74,6 +74,10 @@ export const routes: Routes = [
     loadComponent: () => import('./css-examples/css-has/css-has').then(m => m.CssHas)
   },
   {
+    path: 'ang-mat-components',
+    loadComponent: () => import('./ang-mat-components/ang-mat-components').then(m => m.AngMatComponents)
+  },
+  {
     path: 'sub-grid',
     // Use loadComponent for lazy loading the layout container
     loadComponent: () => import('./components/sub-grid-container/sub-grid-container').then(m => m.SubGridContainer),

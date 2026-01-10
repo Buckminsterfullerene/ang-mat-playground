@@ -75,4 +75,13 @@
   /* Line Heights (M3 Ratios: 1.2x for Headers, 1.5x for Body) */
   --app-line-height-body: 1.5;
   --app-line-height-header: 1.2;
+
+  /* Theme-aware Fallbacks */
+  /* These will be used if Material fails to load its variables */
+  --app-color-header-fallback: #f0f0f0;
+}
+
+/* Optional: Override fallbacks specifically for dark mode */
+body.dark {
+  --app-color-header-fallback: #1a1c1e;
 }
