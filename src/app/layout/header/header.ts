@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { DrawerService } from '../../components/drawer-container/drawer-service';
+import { Drawer } from '../../components/drawer-container/drawer';
 import { HeaderNavItems } from './header-nav-items/header-nav-items';
 
 @Component({
@@ -11,7 +11,7 @@ import { HeaderNavItems } from './header-nav-items/header-nav-items';
   styleUrl: './header.scss',
 })
 export class Header {
-  #drawerService = inject(DrawerService);
+  #drawerService = inject(Drawer);
 
   /**
    * Opens the right-hand drawer and loads the HeaderNavItems component into it.

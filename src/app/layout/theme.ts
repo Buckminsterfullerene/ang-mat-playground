@@ -1,36 +1,80 @@
-import { Injectable, RendererFactory2, inject, signal, effect } from '@angular/core';
+import { Injectable, inject, signal, effect, RendererFactory2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
+/** Possible accessibility modes for visual clarity. */
+export type ContrastMode = 'normal' | 'high';
+
+/**
+ * Global store for application theme and accessibility states.
+ * Manages the reactive synchronization of theme classes on the document body.
+ */
 @Injectable({ providedIn: 'root' })
 export class Theme {
-  private document = inject(DOCUMENT);
-  private renderer = inject(RendererFactory2).createRenderer(null, null);
+  /** Reference to the browser's document for direct body manipulation. */
+  readonly #document = inject(DOCUMENT);
 
-  // Signal to track theme state.
-  // Initialize the signal based on the OS preference.
-  // `matches` returns `true` if the user's OS is in dark mode.
-  isDark = signal(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  /** Platform-safe renderer used to modify DOM elements outside Angular templates. */
+  readonly #renderer = inject(RendererFactory2).createRenderer(null, null);
+
+  /**
+   * Current color scheme state.
+   * Initialized from the user's OS preference (prefers-color-scheme).
+   * @readonly
+   */
+  readonly isDark = signal(window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+  /**
+   * Current contrast mode for accessibility.
+   * @readonly
+   */
+  readonly contrastMode = signal<ContrastMode>('normal');
 
   constructor() {
-    // Listen for changes in the OS theme (e.g., scheduled night mode)
-    const query = window.matchMedia('(prefers-color-scheme: dark)');
+    this.#initMediaListener();
+    this.#syncBodyClasses();
+  }
 
-    // Modern event listener for media queries
-    query.addEventListener('change', (e) => {
-      this.isDark.set(e.matches);
-    });
+  /**
+   * Toggles the global theme between light and dark modes.
+   */
+  toggleTheme() {
+    this.isDark.update(v => !v);
+  }
 
-    // Automatically sync the class on the `body` whenever the `signal` changes
+  /**
+   * Sets a specific contrast mode.
+   * @param mode The desired contrast level ('normal' or 'high').
+   */
+  setContrast(mode: ContrastMode) {
+    this.contrastMode.set(mode);
+  }
+
+  /**
+   * Reactive effect that keeps the document body classes in sync with service signals.
+   * This is the idiomatic way to handle "out-of-template" DOM updates.
+   * @private
+   */
+  #syncBodyClasses() {
     effect(() => {
-      const themeClass = this.isDark() ? 'dark' : 'light';
-      const prevClass = this.isDark() ? 'light' : 'dark';
+      const body = this.#document.body;
+      const isDark = this.isDark();
+      const contrast = this.contrastMode();
 
-      this.renderer.addClass(this.document.body, themeClass);
-      this.renderer.removeClass(this.document.body, prevClass);
+      this.#renderer.addClass(body, isDark ? 'dark' : 'light');
+      this.#renderer.removeClass(body, isDark ? 'light' : 'dark');
+
+      this.#renderer.addClass(body, `${contrast}-contrast`);
+      this.#renderer.removeClass(body, contrast === 'high' ? 'normal-contrast' : 'high-contrast');
     });
   }
 
-  toggleTheme() {
-    this.isDark.update(v => !v);
+  /**
+   * Listens for OS-level color scheme changes (e.g., scheduled night mode)
+   * to update the theme reactively.
+   * @private
+   */
+  #initMediaListener() {
+    window.matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', (e) => this.isDark.set(e.matches));
   }
 }

@@ -1,27 +1,36 @@
 import { Injectable, signal } from '@angular/core';
 import { SidebarCollapseMode } from '../enums/sidebar-enum';
 
+/**
+ * Global store managing the visibility and behavioral modes of the right sidebar.
+ * Acts as the single source of truth for sidebar state across the application.
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class RightSidebarState {
-  // State for whether the sidebar is open or closed
+  /**
+   * Reactive visibility state.
+   * `true` indicates the sidebar is expanded; `false` indicates it is collapsed/hidden.
+   */
   readonly isOpen = signal(true);
 
-  // State for the collapse mode when closed
+  /**
+   * The visual behavior applied when the sidebar is in its closed state.
+   * Defined by {@link SidebarCollapseMode}.
+   */
   readonly collapseMode = signal<SidebarCollapseMode>(SidebarCollapseMode.Collapsed);
 
   /**
-   * Toggles the open/closed state of the sidebar.
-   * Updates the `isOpen` signal to its opposite boolean value.
+   * Toggles the sidebar visibility.
    */
   toggleSidebar(): void {
     this.isOpen.update(open => !open);
   }
 
   /**
-   * Sets the preferred collapse mode for the sidebar when it is closed.
-   * This allows child components to influence the sidebar's behavior on close.
+   * Configures how the sidebar should appear when {@link isOpen} is false.
+   * @param mode The desired {@link SidebarCollapseMode}.
    */
   setCollapseMode(mode: SidebarCollapseMode): void {
     this.collapseMode.set(mode);

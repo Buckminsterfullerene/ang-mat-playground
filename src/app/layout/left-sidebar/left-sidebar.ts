@@ -4,6 +4,11 @@ import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { NavItem } from '../interfaces/nav-item-interface';
 
+/**
+ * Navigation sidebar located on the left side of the application layout.
+ * Manages its own expansion state and orchestrates sub-menu visibility.
+ * Emits width updates to allow the parent layout to adjust CSS Grid/Flex dimensions.
+ */
 @Component({
   selector: 'app-left-sidebar',
   imports: [CommonModule, RouterModule, MatIconModule],
@@ -11,10 +16,22 @@ import { NavItem } from '../interfaces/nav-item-interface';
   styleUrls: ['./left-sidebar.scss']
 })
 export class LeftSidebar {
+  /**
+   * Internal visibility state of the sidebar.
+   * `true` represents the expanded view (250px), `false` the collapsed view (60px).
+   */
   isSidebarOpen = signal(true);
+
+  /**
+   * Tracks the label of the currently expanded sub-navigation menu.
+   * Only one sub-menu can be open at a time.
+   */
   openSubMenuLabel = signal<string | null>(null);
 
-  // Use the new output() function for signal-based outputs
+  /**
+   * Signal-based output that notifies the parent layout of width changes.
+   * Used to drive CSS Custom Properties like `--left-sidebar-width`.
+   */
   widthChange = output<number>();
 
   navItems: NavItem[] = [
@@ -92,7 +109,7 @@ export class LeftSidebar {
    * Toggle the submenu for a given nav item.
    *
    * If the provided item is already the open submenu, this closes it by clearing
-   * `openSubMenuLabel`. Otherwise it sets `openSubMenuLabel` to the item's label.
+   * `openSubMenuLabel`. Otherwise, it sets `openSubMenuLabel` to the item's label.
    * If the sidebar is currently closed, opening the submenu will also open the
    * sidebar and emit the expanded width.
    *

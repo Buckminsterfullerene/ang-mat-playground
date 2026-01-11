@@ -13,13 +13,25 @@ import { SidebarCollapseMode } from '../enums/sidebar-enum';
 })
 // Class name updated to RightSidebar (no "Component" suffix)
 export class RightSidebar {
+  /** Reactive input determining if the sidebar is expanded. */
   isSidebarOpen = input.required<boolean>();
+
+  /** Behavior of the sidebar when closed (e.g., hidden vs icon-only). */
   collapseMode = input<SidebarCollapseMode>(SidebarCollapseMode.Collapsed);
+
+  /** Emits the calculated pixel width whenever visibility or mode changes. */
   widthChange = output<number>();
-  // Emit event when the internal toggle button is clicked (optional, but good practice)
+
+  /** Requests a visibility toggle from the parent state manager. */
   toggleSidebarEvent = output<boolean>();
 
+
+  /**
+   * Tracks which top-level menu item's sub-navigation is currently visible.
+   * @derived
+   */
   openSubMenuLabel = signal<string | null>(null);
+  /** Static configuration for sidebar navigation links. */
   navItems: NavItem[] = [
     { label: 'Settings', icon: 'settings', link: '/' },
     { label: 'Help', icon: 'help_center', link: '/' },
@@ -35,24 +47,28 @@ export class RightSidebar {
     { label: 'Profile', icon: 'person', link: '/' }
   ];
 
-  // Effect to handle state changes when the input updates (e.g., from parent button click)
-  // Ensures the width change event is emitted regardless of where the toggle originated
   constructor() {
+    this.#initWidthSynchronization();
+  }
+
+  /**
+   * Synchronizes internal layout state with external parent dimensions.
+   * Automatically calculates and emits the sidebar width based on reactive inputs.
+   * Effect to handle state changes when the input updates (e.g., from parent button click)
+   * Ensures the width change event is emitted regardless of where the toggle originated
+   * @private
+   */
+  #initWidthSynchronization() {
     effect(() => {
-      // Use the input signal to determine the width to emit
       const isOpen = this.isSidebarOpen();
       const mode = this.collapseMode();
-      let width: number;
 
-      if (isOpen) {
-        width = 300; // Full width when open
-      } else {
-        // Use 0px if hidden, 60px if collapsed
-        width = mode === SidebarCollapseMode.Hidden ? 0 : 60;
-      }
+      // Calculate width based on state and mode constants
+      const width = isOpen ? 300 : (mode === SidebarCollapseMode.Hidden ? 0 : 60);
 
       this.widthChange.emit(width);
 
+      // Reset sub-menus when the sidebar closes for a cleaner UX
       if (!isOpen) {
         this.openSubMenuLabel.set(null);
       }
@@ -79,7 +95,7 @@ export class RightSidebar {
    * Toggle the submenu for a given nav item.
    *
    * If the provided item is already the open submenu, this closes it by clearing
-   * `openSubMenuLabel`. Otherwise it sets `openSubMenuLabel` to the item's label.
+   * `openSubMenuLabel`. Otherwise, it sets `openSubMenuLabel` to the item's label.
    * If the sidebar is currently closed, opening the submenu requests the parent
    * to open the sidebar by emitting `toggleSidebarEvent(true)`.
    *

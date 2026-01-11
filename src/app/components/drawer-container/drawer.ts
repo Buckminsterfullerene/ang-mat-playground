@@ -1,18 +1,36 @@
 import { Injectable, signal, Type, untracked } from '@angular/core';
 import { DrawerConfig } from './drawer-container-interface';
 
+/**
+ * Global coordinator for dynamic drawer overlays.
+ * Orchestrates the lifecycle of injected components, configuration state,
+ * and focus management to ensure accessible user interactions.
+ */
 @Injectable({
   providedIn: 'root',
 })
-export class DrawerService {
+export class Drawer {
+  /** Internal writable signal tracking the drawer's visibility. */
   #isDrawerOpen = signal(false);
+
+  /** Reference to the document element that held focus prior to drawer activation. */
   #elementBeforeDrawerOpened: HTMLElement | null = null;
+
+  /**
+   * Public read-only signal for visibility.
+   * Consumers use this to drive enter/leave animations and template logic.
+   */
   readonly isOpen = this.#isDrawerOpen.asReadonly();
 
-  // This signal holds the *type* of component we want to display. This is the "injected" component.
+  /**
+   * The TypeScript class of the component currently targeted for dynamic rendering.
+   * This signal holds the *type* of component we want to display. This is the "injected" component.
+   * @readonly
+   */
   #componentToRender = signal<Type<unknown> | null>(null);
   readonly currentComponent = this.#componentToRender.asReadonly();
 
+  /** Current active configuration determining drawer behavior and styling. */
   #config = signal<DrawerConfig | null>(null); // Signal to hold config
 
   /**

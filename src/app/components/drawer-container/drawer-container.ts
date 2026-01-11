@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CdkTrapFocus, FocusMonitor } from '@angular/cdk/a11y'; // Import CDK A11y
-import { DrawerService } from './drawer-service';
+import { Drawer } from './drawer';
 import { DrawerConfig } from './drawer-container-interface';
 
 @Component({
@@ -28,7 +28,7 @@ import { DrawerConfig } from './drawer-container-interface';
   },
 })
 export class DrawerContainer implements OnInit {
-  #drawerService = inject(DrawerService);
+  #drawerService = inject(Drawer);
   #focusMonitor = inject(FocusMonitor);
   #renderer = inject(Renderer2);
   serviceIsOpen = this.#drawerService.isOpen;

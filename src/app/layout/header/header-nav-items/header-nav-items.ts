@@ -28,7 +28,12 @@ import { MatMenuModule } from '@angular/material/menu';
   styleUrl: './header-nav-items.scss',
 })
 export class HeaderNavItems {
-  theme = inject(Theme);
+  /**
+   * Access to the global application theme state and class management.
+   * @protected
+   */
+  protected readonly theme = inject(Theme);
+
   /**
    * An input property (signal-based) that receives configuration data
    * for how the navigation items should be displayed (e.g., 'column' or 'default').
@@ -36,27 +41,33 @@ export class HeaderNavItems {
    */
   context = input<DrawerContext>();
 
-  // Computed signal: Reactive and clean
-  themeIcon = computed(() => this.theme.isDark() ? 'light_mode' : 'dark_mode');
+  /**
+   * The Material icon name to display based on the current dark mode state.
+   * @derived
+   */
+  protected readonly themeIcon = computed(() => this.theme.isDark() ? 'light_mode' : 'dark_mode');
 
-  toggle() {
+  /**
+   * Human-readable label for the high-contrast toggle button.
+   * @derived
+   */
+  protected readonly contrastText = computed(() => this.theme.contrastMode() === 'high' ? 'High Contrast: Off' : 'High Contrast: On');
+
+  /**
+   * Current CSS class to apply to the navigation container,
+   * derived from the layout context.
+   * @derived
+   */
+  protected readonly modeClass = computed(() => this.context()?.displayMode ?? 'default');
+
+  /** Toggles the global theme between light and dark modes. */
+  protected toggleTheme() {
     this.theme.toggleTheme();
   }
 
-  /**
-   * Determines the CSS class dynamically based on the display mode specified in the context input.
-   * Handles both signal-based inputs (by calling the input function) and standard property inputs.
-   *
-   * @returns {string} The CSS class name corresponding to the current display mode, or 'default' if none is set.
-   */
-  get modeClass(): string {
-    // Check if 'context' is a function (signal context)
-    if (typeof this.context === 'function') {
-      // If it is a function, call it to get the value
-      return this.context()?.displayMode || 'default';
-    }
-    // Otherwise, treat it as a standard property access (static context)
-    // We cast `this.context` to the expected DrawerContext type here
-    return (this.context as DrawerContext)?.displayMode || 'default';
+  /** Switches the application contrast mode between high and normal. */
+  protected toggleHighContrast() {
+    const nextMode = this.theme.contrastMode() === 'high' ? 'normal' : 'high';
+    this.theme.setContrast(nextMode);
   }
 }

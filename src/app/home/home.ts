@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { DrawerService } from '../components/drawer-container/drawer-service';
+import { Drawer } from '../components/drawer-container/drawer';
 import { TempExample, TempExampleData } from './temp-example/temp-example';
 import { DrawerConfig } from '../components/drawer-container/drawer-container-interface';
 
@@ -13,7 +13,7 @@ import { DrawerConfig } from '../components/drawer-container/drawer-container-in
 })
 export class Home {
   // Inject the service functionally
-  #drawerService = inject(DrawerService);
+  #drawerService = inject(Drawer);
 
   // Expose the signal state to the template for dynamic icon selection
   readonly isDrawerOpen = this.#drawerService.isOpen;
