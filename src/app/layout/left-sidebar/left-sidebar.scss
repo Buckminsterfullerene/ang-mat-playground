@@ -15,14 +15,22 @@ aside {
 nav {
   flex: 1 1 auto;
   width: 100%;
-  padding: 5px 1em;
-
-  /* Prevent 'scrollbar-gutter' from shifting content when it appears */
-  scrollbar-gutter: stable;
 
   transition: width 300ms ease-in-out, padding 300ms ease-in-out;
   overflow-y: auto;
   overflow-x: hidden;
+
+  /* Prevent 'scrollbar-gutter' from shifting content when it appears */
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  /* Style with OKLCH colors: scrollbar-color: [thumb-color] [track-color] */
+  scrollbar-color: var(--mat-sys-primary) transparent;
+
+  &::-webkit-scrollbar-thumb {
+    /* Uses color-mix for a subtle branded effect */
+    background-color: color-mix(in oklch, var(--mat-sys-primary), transparent 60%);
+    border-radius: 10px;
+  }
 
   &.close {
     padding: 5px;

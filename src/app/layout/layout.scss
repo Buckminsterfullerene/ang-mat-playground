@@ -10,6 +10,8 @@ Do not add background colors or other styles that may interfere with child compo
   /* Define default variable fallbacks if needed, matching the initial signal values */
   --left-sidebar-width: 15.625rem;
   --right-sidebar-width: 15.625rem;
+
+  --header-height: 60px;
 }
 
 .grid-container {
@@ -19,19 +21,24 @@ Do not add background colors or other styles that may interfere with child compo
   /* Two columns: Left, Content (1fr) */
   grid-template-columns: var(--left-sidebar-width, 15.625rem) 1fr;
   /* Two rows: header and main content/sidebars area */
-  grid-template-rows: auto 1fr;
+  grid-template-rows: var(--header-height) 1fr;
   /* Assign names to grid areas for easier placement (3 columns wide) */
   grid-template-areas:
     "header header header"
     "left-sidebar content right-sidebar";
 
   min-height: 100vh;
+  min-height: 100dvh;
   /* Transition applies to both dynamic widths now */
   transition: grid-template-columns 300ms ease-in-out;
 }
 
 .header-container {
   grid-area: header;
+  position: sticky;
+  top: 0;
+  z-index: 1000; // Ensure it stays above sidebar and content
+  height: var(--header-height);
 }
 
 .left-sidebar-container {
@@ -41,6 +48,12 @@ Do not add background colors or other styles that may interfere with child compo
   //background-color: var(--base-clr);
   display: flex;
   flex-direction: column;
+
+  // Ensure the sidebar is also sticky so it doesn't scroll away
+  position: sticky;
+  top: var(--header-height);
+  height: calc(100vh - var(--header-height));
+  overflow-y: hidden;
 }
 
 .right-sidebar-container {
@@ -58,7 +71,7 @@ Do not add background colors or other styles that may interfere with child compo
 @media (max-width: 800px) {
   .grid-container {
     /* Small Viewport: Content takes up 100% width, sidebars have 0 width */
-    grid-template-columns: 0 1fr 0;
+    grid-template-columns: 1fr;
 
     /* Redefine grid areas so header and content span all columns */
     grid-template-areas:

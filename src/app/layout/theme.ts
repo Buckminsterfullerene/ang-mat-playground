@@ -56,15 +56,17 @@ export class Theme {
    */
   #syncBodyClasses() {
     effect(() => {
-      const body = this.#document.body;
+      const root = this.#document.documentElement;
       const isDark = this.isDark();
       const contrast = this.contrastMode();
 
-      this.#renderer.addClass(body, isDark ? 'dark' : 'light');
-      this.#renderer.removeClass(body, isDark ? 'light' : 'dark');
+      // Sync Light/Dark
+      this.#renderer.addClass(root, isDark ? 'dark' : 'light');
+      this.#renderer.removeClass(root, isDark ? 'light' : 'dark');
 
-      this.#renderer.addClass(body, `${contrast}-contrast`);
-      this.#renderer.removeClass(body, contrast === 'high' ? 'normal-contrast' : 'high-contrast');
+      // Sync Contrast
+      this.#renderer.addClass(root, `${contrast}-contrast`);
+      this.#renderer.removeClass(root, contrast === 'high' ? 'normal-contrast' : 'high-contrast');
     });
   }
 

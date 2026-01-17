@@ -38,27 +38,50 @@ $dark-config: (
   )
 );
 
-// Apply themes based on your body classes
-body.light {
+/**
+ * Root Level Scrollbar Styling
+ * This applies to the HTML element. It references variables that will be
+ * provided by the .light and .dark classes below.
+ */
+html {
+  scrollbar-width: thin;
+  // Use primary for visibility or outline-variant for subtleness
+  scrollbar-color: var(--mat-sys-primary) transparent;
+  scrollbar-gutter: stable;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: color-mix(in oklch, var(--mat-sys-primary), transparent 50%);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+
+    &:hover {
+      background-color: var(--mat-sys-primary);
+    }
+  }
+}
+
+/**
+ * Theme Application
+ * We apply these to the HTML tag via the theme service.
+ */
+html.light {
   @include mat.theme($light-config);
-  @include app-variables();
   color-scheme: light;
 }
 
-body.dark {
+html.dark {
   @include mat.theme($dark-config);
-  @include app-variables();
   color-scheme: dark;
 }
 
-// High Contrast Theme Definition
-body.light.high-contrast {
-  @include colors.high-contrast-overrides(light);
-}
-
-body.dark.high-contrast {
-  @include colors.high-contrast-overrides(dark);
-}
+// High Contrast Support at the root
+html.light.high-contrast { @include colors.high-contrast-overrides(light); }
+html.dark.high-contrast { @include colors.high-contrast-overrides(dark); }
 
 // Global defaults for body
 body {
@@ -72,6 +95,7 @@ body {
   font-weight: var(--mat-sys-body-medium-weight);
   line-height: var(--mat-sys-body-medium-line-height);
   transition: background-color 0.3s, color 0.3s; // Smooth transition
+  @include app-variables();
 }
 
 .mat-icon.material-symbols-outlined {
