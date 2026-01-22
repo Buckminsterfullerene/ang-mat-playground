@@ -47,7 +47,7 @@ html {
   scrollbar-width: thin;
   // Use primary for visibility or outline-variant for subtleness
   scrollbar-color: var(--mat-sys-primary) transparent;
-  scrollbar-gutter: stable;
+  //scrollbar-gutter: stable;
   overflow-x: hidden;
 
   &::-webkit-scrollbar {
