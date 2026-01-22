@@ -1,45 +1,57 @@
-/* Define SCSS variables locally for this component to avoid global conflicts */
 :host {
-  --base-clr: #11121a;
-  --line-clr: #42434a; /* Note: This is now expected to be used by the Layout component */
-  --hover-clr: #222533;
-  --text-clr: #e6e6ef;
-  --accent-clr: #5e63ff;
-  --secondary-text-clr: #b0b3c1;
+  display: block;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--mat-sys-surface-container);
 }
 
-// Ensure proper box modeling for all internal elements
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+aside {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Use the element selector 'nav' as there is only one in the component template */
 nav {
-  height: 100%;
+  flex: 1;
   width: 100%;
-  padding: 5px 1em;
-  background-color: var(--base-clr);
-  /* Changed from border-right to border-left for right alignment */
-  //border-left: 1px solid var(--line-clr);
-  position: sticky;
-  top: 0;
+
+  //position: sticky;
+  //top: 0;
   /* Align to the end of the grid container (right side) */
-  align-self: end;
+  //align-self: end;
   transition: width 300ms ease-in-out, padding 300ms ease-in-out;
   overflow-y: auto;
   overflow-x: hidden;
 
+  /* Prevent 'scrollbar-gutter' from shifting content when it appears */
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  /* Style with OKLCH colors: scrollbar-color: [thumb-color] [track-color] */
+  scrollbar-color: var(--mat-sys-primary) transparent;
+
+  &::-webkit-scrollbar-thumb {
+    /* Uses color-mix for a subtle branded effect */
+    background-color: color-mix(in oklch, var(--mat-sys-primary), transparent 60%);
+    border-radius: 10px;
+  }
+
   &.close {
     padding: 5px;
+    width: 3.75rem;
+    /* In 'close' mode, hide the scrollbar to keep it clean */
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
   }
 
   ul {
     list-style: none;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    padding-inline-start: 0;
+    min-height: min-content;
 
     > li:first-child {
       display: flex;
@@ -49,7 +61,7 @@ nav {
 
       .logo {
         font-weight: 600;
-        color: var(--text-clr);
+        color: var(--mat-sys-on-surface);
         padding: .85em;
       }
     }
@@ -68,27 +80,27 @@ nav {
     border-radius: 0.5em;
     padding: 0.85em;
     text-decoration: none;
-    color: var(--text-clr);
+    color: var(--mat-sys-on-surface-variant);
     display: flex;
     gap: 1em;
     cursor: pointer;
 
     &:hover {
-      background-color: var(--hover-clr);
+      background-color: var(--mat-sys-surface-container-high);
     }
   }
 
   .active {
-    color: var(--accent-clr);
+    color: var(--mat-sys-primary);
 
     mat-icon {
-      color: var(--accent-clr);
+      color: var(--mat-sys-primary);
     }
   }
 
   mat-icon {
     flex-shrink: 0;
-    color: var(--text-clr);
+    color: var(--mat-sys-on-surface-variant);
     transition: color 150ms ease;
   }
 
@@ -148,7 +160,7 @@ nav {
     cursor: pointer;
 
     &:hover {
-      background-color: var(--hover-clr);
+      background-color: var(--mat-sys-surface-container-high);
     }
 
     mat-icon {

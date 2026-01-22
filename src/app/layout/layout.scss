@@ -19,18 +19,28 @@ Do not add background colors or other styles that may interfere with child compo
   /* Three columns: Left, Content (1fr), Right */
   //grid-template-columns: var(--left-sidebar-width, 250px) 1fr var(--right-sidebar-width, 250px);
   /* Two columns: Left, Content (1fr) */
-  grid-template-columns: var(--left-sidebar-width, 15.625rem) 1fr;
+  //grid-template-columns: var(--left-sidebar-width, 15.625rem) 1fr;
+  grid-template-columns: var(--left-sidebar-width) 1fr 0;
   /* Two rows: header and main content/sidebars area */
   grid-template-rows: var(--header-height) 1fr;
   /* Assign names to grid areas for easier placement (3 columns wide) */
+  //grid-template-areas:
+  //  "header header"
+  //  "left-sidebar content";
   grid-template-areas:
     "header header header"
     "left-sidebar content right-sidebar";
 
   min-height: 100vh;
   min-height: 100dvh;
+  width: 100%;
   /* Transition applies to both dynamic widths now */
-  transition: grid-template-columns 300ms ease-in-out;
+  transition: grid-template-columns 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.show-right {
+    // Only expand this column when the state is visible and not hidden
+    grid-template-columns: var(--left-sidebar-width) 1fr var(--right-sidebar-width);
+  }
 }
 
 .header-container {
@@ -60,23 +70,54 @@ Do not add background colors or other styles that may interfere with child compo
   /* Assign to the specific right area name */
   grid-area: right-sidebar;
   /* Border is now on the left side of the right container */
-  border-left: 1px solid var(--line-clr);
-  //background-color: var(--base-clr);
+  //border-left: 1px solid var(--line-clr);
+
+  /* Using transparent border prevents layout shift when switching classes */
+  border-left: 1px solid transparent;
+  transition: border-color 300ms;
+
+  /* overflow: hidden prevents the internal component width from
+     forcing an X-scrollbar during the grid-column transition */
+  overflow: hidden;
+
+  position: sticky;
+  top: var(--header-height);
+  height: calc(100vh - var(--header-height));
+  // Default (Sidebar Hidden): Hide it visually
+  display: flex;
+  flex-direction: column;
+
+  .show-right & {
+    border-left: 1px solid var(--line-clr);
+  }
+}
+
+// State: When sidebar IS visible, override 'display: none'
+.grid-container.show-right .right-sidebar-container {
+  display: flex;
+  flex-direction: column;
 }
 
 .content {
   grid-area: content;
+  // Allow content to handle its own scrolling
+  overflow-y: auto;
+  // Prevent content from accidentally triggering X-scrollbars
+  overflow-x: hidden;
 }
 
 @media (max-width: 800px) {
   .grid-container {
     /* Small Viewport: Content takes up 100% width, sidebars have 0 width */
     grid-template-columns: 1fr;
+    width: 100%;
 
     /* Redefine grid areas so header and content span all columns */
     grid-template-areas:
       "header header header"
       ". content ."; /* Sidebars are effectively hidden as they have no column width */
+
+    .left-sidebar-container, .right-sidebar-container{ display: contents; }
   }
 
   /* Optional: Ensure the sidebar containers themselves do not take up space or show borders/backgrounds */

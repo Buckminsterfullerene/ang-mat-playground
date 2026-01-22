@@ -1,9 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from './header/header';
 import { LeftSidebar } from './left-sidebar/left-sidebar';
 import { RightSidebar } from './right-sidebar/right-sidebar';
 import { DrawerContainer } from '../components/drawer-container/drawer-container';
+import { RightSidebarState } from './right-sidebar/right-sidebar-state';
 
 /**
  * Main layout wrapper responsible for orchestrating the application shell.
@@ -19,7 +20,8 @@ import { DrawerContainer } from '../components/drawer-container/drawer-container
     // Manage both left and right widths dynamically
     // These bindings update CSS variables in real-time as signals change
     '[style.--left-sidebar-width.px]': 'leftSidebarWidth()',
-    '[style.--right-sidebar-width.px]': 'rightSidebarWidth()'
+    '[style.--right-sidebar-width.px]': 'rightSidebarWidth()',
+    '[class.show-right]': 'state.isVisible()'
   }
 })
 export class Layout {
@@ -34,6 +36,8 @@ export class Layout {
    * Bound to the CSS variable `--right-sidebar-width`.
    */
   rightSidebarWidth = signal(250); // initial right width in pixels
+
+  protected readonly state = inject(RightSidebarState);
 
   /**
    * Updates the left sidebar width based on emission from the child component.
