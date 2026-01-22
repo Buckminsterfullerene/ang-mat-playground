@@ -1,6 +1,5 @@
 import {
   Component,
-  signal,
   output,
   effect,
   input,
@@ -12,7 +11,6 @@ import {
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { NavItem } from '../interfaces/nav-item-interface';
 import { SidebarCollapseMode } from '../enums/sidebar-enum';
 import { MatButtonModule } from '@angular/material/button';
 import { RightSidebarState } from './right-sidebar-state';
@@ -52,48 +50,6 @@ export class RightSidebar {
   dynamicContentHost = viewChild('dynamicContentHost', { read: ViewContainerRef });
   #sidebarState = inject(RightSidebarState);
 
-  /**
-   * Tracks which top-level menu item's sub-navigation is currently visible.
-   * @derived
-   */
-  openSubMenuLabel = signal<string | null>(null);
-
-  /** Static configuration for sidebar navigation links. */
-  navItems: NavItem[] = [
-    { label: 'Settings', icon: 'settings', link: '/' },
-    { label: 'Help', icon: 'help_center', link: '/' },
-    {
-      label: 'Admin',
-      icon: 'admin_panel_settings',
-      subItems: [
-        { label: 'Users', icon: 'group', link: '/' },
-        { label: 'Permissions', icon: 'verified_user', link: '/' },
-        { label: 'Logs', icon: 'list_alt', link: '/' },
-        { label: 'Security', icon: 'shield', link: '/' },
-        { label: 'Inventory', icon: 'inventory_2', link: '/' },
-        { label: 'Cloud Storage', icon: 'cloud_done', link: '/' },
-        { label: 'Statistics', icon: 'bar_chart', link: '/' },
-        { label: 'Support', icon: 'contact_support', link: '/' },
-        { label: 'Shopping Cart', icon: 'shopping_cart', link: '/' },
-        { label: 'Payments', icon: 'payments', link: '/' },
-        { label: 'History', icon: 'history', link: '/' },
-        { label: 'Email', icon: 'mail_outline', link: '/' },
-        { label: 'Tasks', icon: 'task_alt', link: '/' },
-        { label: 'Language', icon: 'language', link: '/' },
-        { label: 'Dark Mode', icon: 'dark_mode', link: '/' },
-        { label: 'Connected Devices', icon: 'devices', link: '/' },
-        { label: 'Backup', icon: 'backup', link: '/' },
-        { label: 'Flagged', icon: 'outlined_flag', link: '/' },
-        { label: 'Feedback', icon: 'rate_review', link: '/' },
-        { label: 'Verified', icon: 'verified_user', link: '/' },
-        { label: 'Reminders', icon: 'alarm', link: '/' },
-        { label: 'Public Profile', icon: 'public', link: '/' },
-        { label: 'Extensions', icon: 'extension', link: '/' }
-      ]
-    },
-    { label: 'Profile', icon: 'person', link: '/' }
-  ];
-
   constructor() {
     this.#initWidthSynchronization();
     this.#initDynamicComponentLoader();
@@ -115,11 +71,6 @@ export class RightSidebar {
       const width = isOpen ? 300 : (mode === SidebarCollapseMode.Hidden ? 0 : 60);
 
       this.widthChange.emit(width);
-
-      // Reset sub-menus when the sidebar closes for a cleaner UX
-      if (!isOpen) {
-        this.openSubMenuLabel.set(null);
-      }
     });
   }
 
@@ -158,40 +109,5 @@ export class RightSidebar {
     // Emit the opposite of the current state to the parent, who will manage the actual state
     this.toggleSidebarEvent.emit(!this.isSidebarOpen());
     this.#sidebarState.toggle();
-  }
-
-  /**
-   * Toggle the submenu for a given nav item.
-   *
-   * If the provided item is already the open submenu, this closes it by clearing
-   * `openSubMenuLabel`. Otherwise, it sets `openSubMenuLabel` to the item's label.
-   * If the sidebar is currently closed, opening the submenu requests the parent
-   * to open the sidebar by emitting `toggleSidebarEvent(true)`.
-   *
-   * Side effects:
-   * - Mutates signal: `openSubMenuLabel`.
-   * - Emits via: `toggleSidebarEvent.emit(true)` when opening a closed sidebar.
-   */
-  toggleSubMenu(item: NavItem): void {
-    const currentLabel = this.openSubMenuLabel();
-    if (currentLabel === item.label) {
-      this.openSubMenuLabel.set(null);
-    } else {
-      this.openSubMenuLabel.set(item.label);
-    }
-
-    if (!this.isSidebarOpen()) {
-      this.toggleSidebarEvent.emit(true);
-    }
-  }
-
-  /**
-   * Return whether the submenu for the given label is currently open.
-   *
-   * Read-only accessor that compares the stored `openSubMenuLabel` signal to the
-   * provided `itemLabel`.
-   */
-  isSubMenuOpen(itemLabel: string): boolean {
-    return this.openSubMenuLabel() === itemLabel;
   }
 }

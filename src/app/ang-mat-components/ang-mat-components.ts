@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, computed, inject, signal, ViewChild } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatButtonToggleGroup, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatInputModule } from '@angular/material/input';
@@ -24,6 +24,15 @@ import {
 } from '@angular/material/snack-bar';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
+import { MatBottomSheet, MatBottomSheetModule, MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import { MatListModule } from '@angular/material/list';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 
 
 export interface Task {
@@ -32,19 +41,147 @@ export interface Task {
   subtasks?: Task[];
 }
 
+const today = new Date();
+const month = today.getMonth();
+const year = today.getFullYear();
+
+export interface PeriodicElement {
+  name: string;
+  position: number;
+  weight: number;
+  symbol: string;
+  description: string;
+}
+
+const ELEMENT_DATA: PeriodicElement[] = [
+  {
+    position: 1,
+    name: 'Hydrogen',
+    weight: 1.0079,
+    symbol: 'H',
+    description: `Hydrogen is a chemical element with symbol H and atomic number 1. With a standard
+        atomic weight of 1.008, hydrogen is the lightest element on the periodic table.`,
+  },
+  {
+    position: 2,
+    name: 'Helium',
+    weight: 4.0026,
+    symbol: 'He',
+    description: `Helium is a chemical element with symbol He and atomic number 2. It is a
+        colorless, odorless, tasteless, non-toxic, inert, monatomic gas, the first in the noble gas
+        group in the periodic table. Its boiling point is the lowest among all the elements.`,
+  },
+  {
+    position: 3,
+    name: 'Lithium',
+    weight: 6.941,
+    symbol: 'Li',
+    description: `Lithium is a chemical element with symbol Li and atomic number 3. It is a soft,
+        silvery-white alkali metal. Under standard conditions, it is the lightest metal and the
+        lightest solid element.`,
+  },
+  {
+    position: 4,
+    name: 'Beryllium',
+    weight: 9.0122,
+    symbol: 'Be',
+    description: `Beryllium is a chemical element with symbol Be and atomic number 4. It is a
+        relatively rare element in the universe, usually occurring as a product of the spallation of
+        larger atomic nuclei that have collided with cosmic rays.`,
+  },
+  {
+    position: 5,
+    name: 'Boron',
+    weight: 10.811,
+    symbol: 'B',
+    description: `Boron is a chemical element with symbol B and atomic number 5. Produced entirely
+        by cosmic ray spallation and supernovae and not by stellar nucleosynthesis, it is a
+        low-abundance element in the Solar system and in the Earth's crust.`,
+  },
+  {
+    position: 6,
+    name: 'Carbon',
+    weight: 12.0107,
+    symbol: 'C',
+    description: `Carbon is a chemical element with symbol C and atomic number 6. It is nonmetallic
+        and tetravalent—making four electrons available to form covalent chemical bonds. It belongs
+        to group 14 of the periodic table.`,
+  },
+  {
+    position: 7,
+    name: 'Nitrogen',
+    weight: 14.0067,
+    symbol: 'N',
+    description: `Nitrogen is a chemical element with symbol N and atomic number 7. It was first
+        discovered and isolated by Scottish physician Daniel Rutherford in 1772.`,
+  },
+  {
+    position: 8,
+    name: 'Oxygen',
+    weight: 15.9994,
+    symbol: 'O',
+    description: `Oxygen is a chemical element with symbol O and atomic number 8. It is a member of
+         the chalcogen group on the periodic table, a highly reactive nonmetal, and an oxidizing
+         agent that readily forms oxides with most elements as well as with other compounds.`,
+  },
+  {
+    position: 9,
+    name: 'Fluorine',
+    weight: 18.9984,
+    symbol: 'F',
+    description: `Fluorine is a chemical element with symbol F and atomic number 9. It is the
+        lightest halogen and exists as a highly toxic pale yellow diatomic gas at standard
+        conditions.`,
+  },
+  {
+    position: 10,
+    name: 'Neon',
+    weight: 20.1797,
+    symbol: 'Ne',
+    description: `Neon is a chemical element with symbol Ne and atomic number 10. It is a noble gas.
+        Neon is a colorless, odorless, inert monatomic gas under standard conditions, with about
+        two-thirds the density of air.`,
+  },
+];
+
+export interface PeriodicElement2 {
+  name: string;
+  position: number;
+  weight: number;
+  symbol: string;
+}
+
+const ELEMENT_DATA2: PeriodicElement2[] = [
+  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
+  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
+  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
+  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
+  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
+  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
+  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
+  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
+  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
+  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
+];
+
 @Component({
   selector: 'app-ang-mat-components',
   imports: [
+    MatBadgeModule,
+    MatBottomSheetModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
     MatCheckboxModule,
+    MatChipsModule,
+    MatDatepickerModule,
     MatDialogModule,
     MatDividerModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatMenuModule,
+    MatPaginatorModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatRadioModule,
@@ -52,15 +189,108 @@ export interface Task {
     MatSlideToggleModule,
     MatSliderModule,
     MatStepperModule,
+    MatTableModule,
     FormsModule,
     ReactiveFormsModule
   ],
+  providers: [provideNativeDateAdapter()],
   templateUrl: './ang-mat-components.html',
   styleUrl: './ang-mat-components.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AngMatComponents {
+export class AngMatComponents implements AfterViewInit {
+  readonly reactiveKeywords = signal(['angular', 'how-to', 'tutorial', 'accessibility']);
+  readonly formControl = new FormControl(['angular']);
+  readonly bestBoys: string[] = ['Samoyed', 'Akita Inu', 'Alaskan Malamute', 'Siberian Husky'];
+
+  announcer = inject(LiveAnnouncer);
+
+  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  dataSource2 = ELEMENT_DATA2;
+  columnsToDisplay = ['name', 'weight', 'symbol', 'position'];
+  columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
+  expandedElement: PeriodicElement | null = null;
+
+  displayedColumns: string[] = [];
+
+  tables = [0];
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  constructor() {
+    this.displayedColumns.length = 24;
+    this.displayedColumns.fill('filler');
+
+    // The first two columns should be position and name; the last two columns: weight, symbol
+    this.displayedColumns[0] = 'position';
+    this.displayedColumns[1] = 'name';
+    this.displayedColumns[22] = 'weight';
+    this.displayedColumns[23] = 'symbol';
+  }
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+  /** Whether the button toggle group contains the id as an active value. */
+  isSticky(buttonToggleGroup: MatButtonToggleGroup, id: string) {
+    return (buttonToggleGroup.value || []).indexOf(id) !== -1;
+  }
+
+  /** Checks whether an element is expanded. */
+  isExpanded(element: PeriodicElement) {
+    return this.expandedElement === element;
+  }
+
+  /** Toggles the expanded state of an element. */
+  toggle(element: PeriodicElement) {
+    this.expandedElement = this.isExpanded(element) ? null : element;
+  }
+
+  hidden = false;
+
+  toggleBadgeVisibility() {
+    this.hidden = !this.hidden;
+  }
+
+  private _bottomSheet = inject(MatBottomSheet);
+
+  openBottomSheet(): void {
+    this._bottomSheet.open(BottomSheetOverviewExampleSheet);
+  }
+
+  removeReactiveKeyword(keyword: string) {
+    this.reactiveKeywords.update(keywords => {
+      const index = keywords.indexOf(keyword);
+      if (index < 0) {
+        return keywords;
+      }
+
+      keywords.splice(index, 1);
+      this.announcer.announce(`removed ${keyword} from reactive form`);
+      return [...keywords];
+    });
+  }
+
+  addReactiveKeyword(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    // Add our keyword
+    if (value) {
+      this.reactiveKeywords.update(keywords => [...keywords, value]);
+      this.announcer.announce(`added ${value} to reactive form`);
+    }
+
+    // Clear the input value
+    event.chipInput!.clear();
+  }
   readonly dialog = inject(MatDialog);
+
+  readonly campaignOne = new FormGroup({
+    start: new FormControl(new Date(year, month, 13)),
+    end: new FormControl(new Date(year, month, 16)),
+  });
+  readonly campaignTwo = new FormGroup({
+    start: new FormControl(new Date(year, month, 15)),
+    end: new FormControl(new Date(year, month, 19)),
+  });
 
   openDialog() {
     const dialogRef = this.dialog.open(DialogContentExampleDialog);
@@ -230,3 +460,39 @@ export class PizzaPartyAnnotatedComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DialogContentExampleDialog {}
+
+@Component({
+  selector: 'bottom-sheet-overview-example-sheet',
+  template: `<mat-nav-list>
+    <a href="https://keep.google.com/" mat-list-item (click)="openLink($event)">
+      <span matListItemTitle>Google Keep</span>
+      <span matLine>Add to a note</span>
+    </a>
+
+    <a href="https://docs.google.com/" mat-list-item (click)="openLink($event)">
+      <span matListItemTitle>Google Docs</span>
+      <span matLine>Embed in a document</span>
+    </a>
+
+    <a href="https://plus.google.com/" mat-list-item (click)="openLink($event)">
+      <span matListItemTitle>Google Plus</span>
+      <span matLine>Share with your friends</span>
+    </a>
+
+    <a href="https://hangouts.google.com/" mat-list-item (click)="openLink($event)">
+      <span matListItemTitle>Google Hangouts</span>
+      <span matLine>Show to your coworkers</span>
+    </a>
+  </mat-nav-list>
+  `,
+  imports: [MatListModule],
+})
+export class BottomSheetOverviewExampleSheet {
+  private _bottomSheetRef =
+    inject<MatBottomSheetRef<BottomSheetOverviewExampleSheet>>(MatBottomSheetRef);
+
+  openLink(event: MouseEvent): void {
+    this._bottomSheetRef.dismiss();
+    event.preventDefault();
+  }
+}
