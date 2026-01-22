@@ -16,7 +16,7 @@ export class ExampleChildSubRoute {
   items: undefined[] = new Array(this.repeatCount);
 
   toggleSidebar(): void {
-    this.sidebarService.toggleSidebar();
+    this.sidebarService.toggle();
   }
 
   setModeHidden(): void {

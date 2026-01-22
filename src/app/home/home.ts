@@ -33,8 +33,16 @@ export class Home implements OnInit {
   }
 
   toggleSidebar(): void {
-    this.#sidebarState.toggleSidebar();
-
+    if (!this.#sidebarState.currentComponent()) {
+      const itemsList: string[] = ['Item A', 'Item B', 'Item C', 'Angular v20 is great!'];
+      const dataPayload: TempExampleData = { items: itemsList };
+      this.#sidebarState.open(TempExample, {
+        data: dataPayload,
+        collapseMode: SidebarCollapseMode.Hidden,
+      });
+    } else {
+      this.#sidebarState.toggle();
+    }
   }
 
   openDrawer(): void {

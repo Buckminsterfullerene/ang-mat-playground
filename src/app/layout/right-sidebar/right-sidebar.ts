@@ -1,17 +1,33 @@
-import { Component, signal, output, effect, input } from '@angular/core';
+import {
+  Component,
+  signal,
+  output,
+  effect,
+  input,
+  viewChild,
+  ViewContainerRef,
+  inject,
+  ComponentRef
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { NavItem } from '../interfaces/nav-item-interface';
 import { SidebarCollapseMode } from '../enums/sidebar-enum';
+import { MatButtonModule } from '@angular/material/button';
+import { RightSidebarState } from './right-sidebar-state';
 
 @Component({
   selector: 'app-right-sidebar',
-  imports: [CommonModule, RouterModule, MatIconModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatIconModule,
+    MatButtonModule
+  ],
   templateUrl: './right-sidebar.html',
   styleUrls: ['./right-sidebar.scss']
 })
-// Class name updated to RightSidebar (no "Component" suffix)
 export class RightSidebar {
   /** Reactive input determining if the sidebar is expanded. */
   isSidebarOpen = input.required<boolean>();
@@ -25,12 +41,23 @@ export class RightSidebar {
   /** Requests a visibility toggle from the parent state manager. */
   toggleSidebarEvent = output<boolean>();
 
+  /**
+   * Reference to the container where dynamic content can be injected.
+   *
+   * Points to ViewContainerRef for the template anchor marked with #dynamicContentHost.
+   * Used to inject components into the sidebar at runtime when opened via {@link RightSidebarState.open}
+   *
+   * @readonly
+   */
+  dynamicContentHost = viewChild('dynamicContentHost', { read: ViewContainerRef });
+  #sidebarState = inject(RightSidebarState);
 
   /**
    * Tracks which top-level menu item's sub-navigation is currently visible.
    * @derived
    */
   openSubMenuLabel = signal<string | null>(null);
+
   /** Static configuration for sidebar navigation links. */
   navItems: NavItem[] = [
     { label: 'Settings', icon: 'settings', link: '/' },
@@ -69,6 +96,7 @@ export class RightSidebar {
 
   constructor() {
     this.#initWidthSynchronization();
+    this.#initDynamicComponentLoader();
   }
 
   /**
@@ -95,6 +123,26 @@ export class RightSidebar {
     });
   }
 
+  #initDynamicComponentLoader() {
+    effect(() => {
+      const host = this.dynamicContentHost();
+      const componentType = this.#sidebarState.currentComponent();
+      const config = this.#sidebarState.getConfig();
+      const isOpen = this.isSidebarOpen();
+
+      if (host && componentType && isOpen) {
+        host.clear();
+        const componentRef: ComponentRef<any> = host.createComponent(componentType);
+
+        if (config?.data) {
+          componentRef.setInput('data', config.data);
+        } else if (host && !isOpen) {
+          host.clear();
+        }
+      }
+    });
+  }
+
   /**
    * Emit a toggle request with the inverse of the current open state.
    *
@@ -109,6 +157,7 @@ export class RightSidebar {
   toggleSidebarInternal(): void {
     // Emit the opposite of the current state to the parent, who will manage the actual state
     this.toggleSidebarEvent.emit(!this.isSidebarOpen());
+    this.#sidebarState.toggle();
   }
 
   /**
