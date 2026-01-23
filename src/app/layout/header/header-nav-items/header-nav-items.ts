@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { DrawerContext } from '../../../components/drawer-container/drawer-container-interface';
 import { CommonModule } from '@angular/common';
@@ -41,6 +41,7 @@ export class HeaderNavItems {
    */
   context = input<DrawerContext>();
 
+
   /**
    * The Material icon name to display based on the current dark mode state.
    * @derived
@@ -52,6 +53,10 @@ export class HeaderNavItems {
    * @derived
    */
   protected readonly contrastText = computed(() => this.theme.contrastMode() === 'high' ? 'High Contrast: Off' : 'High Contrast: On');
+
+  protected readonly isFullscreen = signal(false);
+  protected readonly fullscreenText = computed(() => this.isFullscreen() ? 'Exit Fullscreen' : 'Enter Fullscreen');
+  protected readonly fullscreenIcon = computed(() => this.isFullscreen() ? 'fullscreen_exit' : 'fullscreen');
 
   /**
    * Current CSS class to apply to the navigation container,
@@ -69,5 +74,27 @@ export class HeaderNavItems {
   protected toggleHighContrast() {
     const nextMode = this.theme.contrastMode() === 'high' ? 'normal' : 'high';
     this.theme.setContrast(nextMode);
+  }
+
+  /**
+   * Toggles the fullscreen mode state using the browser's Fullscreen API.
+   * @protected
+   */
+  protected async toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      try {
+        await document.documentElement.requestFullscreen();
+        this.isFullscreen.set(true);
+      } catch (err) {
+        console.error(`Error attempting to enable fullscreen mode: `, err);
+      }
+    } else {
+      try {
+        await document.exitFullscreen();
+        this.isFullscreen.set(false);
+      } catch (err) {
+        console.error(`Error attempting to exit fullscreen mode: `, err);
+      }
+    }
   }
 }

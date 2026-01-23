@@ -15,5 +15,9 @@
       <mat-icon fontIcon="contrast"/>
       <span>{{contrastText()}}</span>
     </button>
+    <button mat-menu-item (click)="toggleFullscreen()">
+      <mat-icon [fontIcon]="fullscreenIcon()"/>
+      <span>{{fullscreenText()}}</span>
+    </button>
   </mat-menu>
 </nav>
