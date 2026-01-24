@@ -1,104 +1,111 @@
 @use '@angular/material' as mat;
 @use './styles/material-theme/_theme-colors' as colors;
 
+// Declare Layer Order (Keep this at the top)
+@layer tokens, reset, theme, layout, components;
+
+// Global Core (Outside layers to ensure mixins are available)
 @include mat.core();
 
 // Define font family
 $font-family-primary: 'Roboto', sans-serif;
 
-// Define app-level variables bridge mixin
-@mixin app-variables() {
-  --mat-app-background-color: var(--mat-sys-surface);
-  --mat-app-text-color: var(--mat-sys-on-surface);
-}
+// Reset Layer: Physical browser defaults
+@layer reset {
+  html {
+    scrollbar-width: thin;
+    // Use primary for visibility or outline-variant for subtleness
+    scrollbar-color: var(--mat-sys-primary) transparent;
+    overflow-x: hidden;
+    font-family: var(--app-font-family-primary, $font-family-primary);
 
-// Light Theme Definition
-$light-config: (
-  color: (
-    theme-type: light,
-    primary: colors.$primary-palette,
-    tertiary: colors.$tertiary-palette
-  ),
-  typography: (
-    brand-family: $font-family-primary,
-    use-system-variables: true
-  )
-);
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
 
-// Dark Theme Definition
-$dark-config: (
-  color: (
-    theme-type: dark,
-    primary: colors.$primary-palette,
-    tertiary: colors.$tertiary-palette
-  ),
-  typography: (
-    brand-family: $font-family-primary,
-    use-system-variables: true
-  )
-);
+    &::-webkit-scrollbar-thumb {
+      background-color: color-mix(in oklch, var(--mat-sys-primary), transparent 50%);
+      border-radius: 10px;
+      border: 2px solid transparent;
+      background-clip: content-box;
 
-/**
- * Root Level Scrollbar Styling
- * This applies to the HTML element. It references variables that will be
- * provided by the .light and .dark classes below.
- */
-html {
-  scrollbar-width: thin;
-  // Use primary for visibility or outline-variant for subtleness
-  scrollbar-color: var(--mat-sys-primary) transparent;
-  //scrollbar-gutter: stable;
-  overflow-x: hidden;
-
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: color-mix(in oklch, var(--mat-sys-primary), transparent 50%);
-    border-radius: 10px;
-    border: 2px solid transparent;
-    background-clip: content-box;
-
-    &:hover {
-      background-color: var(--mat-sys-primary);
+      &:hover {
+        background-color: var(--mat-sys-primary);
+      }
     }
   }
+
+  body {
+    margin: 0;
+    min-height: 100vh; // Fallback for browsers that do not support dvh
+    min-height: 100dvh;
+    transition: background-color 0.3s, color 0.3s;
+  }
 }
 
-/**
- * Theme Application
- * We apply these to the HTML tag via the theme service.
- */
-html.light {
-  @include mat.theme($light-config);
-  color-scheme: light;
-}
+// 3. Theme Layer
+@layer theme {
+  // Light Theme Definition
+  $light-config: (
+    color: (
+      theme-type: light,
+      primary: colors.$primary-palette,
+      tertiary: colors.$tertiary-palette
+    ),
+    typography: (
+      brand-family: $font-family-primary,
+      use-system-variables: true
+    )
+  );
 
-html.dark {
-  @include mat.theme($dark-config);
-  color-scheme: dark;
-}
+  // Dark Theme Definition
+  $dark-config: (
+    color: (
+      theme-type: dark,
+      primary: colors.$primary-palette,
+      tertiary: colors.$tertiary-palette
+    ),
+    typography: (
+      brand-family: $font-family-primary,
+      use-system-variables: true
+    )
+  );
 
-// High Contrast Support at the root
-html.light.high-contrast { @include colors.high-contrast-overrides(light); }
-html.dark.high-contrast { @include colors.high-contrast-overrides(dark); }
+  /**
+   * Theme Application
+   * We apply these to the HTML tag via the theme service.
+   */
+  html.light {
+    @include mat.theme($light-config);
+    color-scheme: light;
+  }
 
-// Global defaults for body
-body {
-  margin: 0;
-  min-height: 100vh;  // Fallback for browsers that do not support dvh
-  min-height: 100dvh;
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font-family: var(--app-font-family-primary, $font-family-primary);
-  font-size: var(--mat-sys-body-medium-size);
-  font-weight: var(--mat-sys-body-medium-weight);
-  line-height: var(--mat-sys-body-medium-line-height);
-  transition: background-color 0.3s, color 0.3s; // Smooth transition
-  @include app-variables();
-}
+  html.dark {
+    @include mat.theme($dark-config);
+    color-scheme: dark;
+  }
 
-.mat-icon.material-symbols-outlined {
-  font-family: 'Material Symbols Outlined';
+  html.high-contrast {
+    &.light {
+      @include colors.high-contrast-overrides(light);
+    }
+
+    &.dark {
+      @include colors.high-contrast-overrides(dark);
+    }
+  }
+
+  // Global defaults for body
+  body {
+    background-color: var(--mat-sys-surface);
+    color: var(--mat-sys-on-surface);
+    // Use project tokens for typography.  This ensures we have a fallback.
+    font-size: var(--app-type-body-medium);
+    font-weight: var(--mat-sys-body-medium-weight);
+    line-height: var(--app-line-height-body);
+  }
+
+  .mat-icon.material-symbols-outlined {
+    font-family: var(--app-font-family-icon, 'Material Symbols Outlined');
+  }
 }
