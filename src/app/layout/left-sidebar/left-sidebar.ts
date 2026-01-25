@@ -25,12 +25,6 @@ export class LeftSidebar {
    */
   protected readonly openSubMenuLabel = signal<string | null>(null);
 
-  /**
-   * Signal-based output that notifies the parent layout of width changes.
-   * Used to drive CSS Custom Properties like `--left-sidebar-width`.
-   */
-  widthChange = output<number>();
-
   navItems: NavItem[] = [
     { label: 'Home', icon: 'home', link: '/' },
     { label: 'Dashboard', icon: 'dashboard', link: '/' },
@@ -91,12 +85,7 @@ export class LeftSidebar {
    * - Emits via: `widthChange.emit(...)`.
    */
   toggleSidebar(): void {
-    this.leftSidebarState.isOpen.update(isOpen => {
-      const newState = !isOpen;
-      // Emit the new width using the output's .emit() method
-      this.widthChange.emit(newState ? 250 : 60);
-      return newState;
-    });
+    this.leftSidebarState.toggle();
     if (!this.leftSidebarState.isOpen()) {
       this.openSubMenuLabel.set(null);
     }
@@ -124,7 +113,6 @@ export class LeftSidebar {
 
     if (!this.leftSidebarState.isOpen()) {
       this.leftSidebarState.isOpen.set(true);
-      this.widthChange.emit(250); // Emit open width
     }
   }
 

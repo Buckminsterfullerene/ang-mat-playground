@@ -1,11 +1,11 @@
-<div class="grid-container" [class.show-right]="state.isVisible()">
+<div class="grid-container" [class.show-right]="rightSidebarState.isVisible()">
   <div class="header-container">
     <app-header/>
   </div>
 
   <!-- Left Sidebar Container -->
   <div class="left-sidebar-container">
-    <app-left-sidebar (widthChange)="handleLeftSidebarWidthChange($event)"/>
+    <app-left-sidebar/>
   </div>
 
   <main class="content"><router-outlet></router-outlet></main>
@@ -13,8 +13,8 @@
   <!-- Right Sidebar Container -->
   <div class="right-sidebar-container">
     <app-right-sidebar
-      [isSidebarOpen]="state.isOpen()"
-      [collapseMode]="state.collapseMode()"
+      [isSidebarOpen]="rightSidebarState.isOpen()"
+      [collapseMode]="rightSidebarState.collapseMode()"
       (widthChange)="handleRightSidebarWidthChange($event)"/>
   </div>
 </div>
