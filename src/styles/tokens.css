@@ -71,7 +71,7 @@
     --app-type-title-small: var(--mat-sys-title-small-size, 0.875rem); /* 14px */
 
     /* Headline: Primary section headers */
-    --app-type-headline-large: var(--mat-sys-headline-large-size, 2rem); /* 32px */
+    --app-type-headline-large: clamp(1.5rem, 5vw, 2rem);  /*var(--mat-sys-headline-large-size, 2rem);*/ /* 32px */
     --app-type-headline-medium: var(--mat-sys-headline-medium-size, 1.75rem); /* 28px */
     --app-type-headline-small: var(--mat-sys-headline-small-size, 1.5rem); /* 24px */
 
@@ -85,6 +85,9 @@
     /* Theme-aware Fallbacks */
     /* These will be used if Material fails to load its variables */
     --app-color-header-fallback: oklch(0.95 0 0);
+
+    /* Dynamic Gaps */
+    --app-grid-gap: clamp(0.5rem, 2vw, 1.5rem);
   }
 
   /* Optional: Override fallbacks specifically for dark mode */

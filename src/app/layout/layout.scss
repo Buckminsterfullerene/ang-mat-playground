@@ -16,20 +16,10 @@
 
   .grid-container {
     display: grid;
-    /* Three columns: Left, Content (1fr), Right */
-    //grid-template-columns: var(--left-sidebar-width, 250px) 1fr var(--right-sidebar-width, 250px);
-    /* Two columns: Left, Content (1fr) */
-    //grid-template-columns: var(--left-sidebar-width, 15.625rem) 1fr;
-    grid-template-columns: var(--left-sidebar-width) 1fr 0;
+    grid-template-columns: 1fr;
     /* Two rows: header and main content/sidebars area */
     grid-template-rows: var(--header-height) 1fr;
-    /* Assign names to grid areas for easier placement (3 columns wide) */
-    //grid-template-areas:
-    //  "header header"
-    //  "left-sidebar content";
-    grid-template-areas:
-    "header header header"
-    "left-sidebar content right-sidebar";
+    grid-template-areas: "header content";
 
     min-height: 100vh;
     min-height: 100dvh;
@@ -37,9 +27,15 @@
     /* Transition applies to both dynamic widths now */
     transition: grid-template-columns 300ms cubic-bezier(0.4, 0, 0.2, 1);
 
-    &.show-right {
-      // Only expand this column when the state is visible and not hidden
-      grid-template-columns: var(--left-sidebar-width) 1fr var(--right-sidebar-width);
+    /* Desktop Tablet / Responsive Refinement */
+    @media (min-width: 801px) {
+      grid-template-areas: "header header header"
+                           "left-sidebar content right-sidebar";
+      grid-template-columns: var(--left-sidebar-width, 15.625rem) 1fr 0;
+
+      &.show-right {
+        grid-template-columns: var(--left-sidebar-width) 1fr var(--right-sidebar-width, 15.625rem);
+      }
     }
   }
 
@@ -104,6 +100,8 @@
     overflow-y: auto;
     // Prevent content from accidentally triggering X-scrollbars
     overflow-x: hidden;
+    /* Ensure content doesn't touch edges on mobile */
+    padding: clamp(1rem, 5vw, 2rem);
   }
 
   @media (max-width: 800px) {
