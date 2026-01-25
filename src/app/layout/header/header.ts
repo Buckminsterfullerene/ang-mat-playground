@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Drawer } from '../../components/drawer-container/drawer';
 import { HeaderNavItems } from './header-nav-items/header-nav-items';
+import { Breakpoint } from '../../services/breakpoint';
+import { LeftSidebarState } from '../left-sidebar/left-sidebar-state';
 
 @Component({
   selector: 'app-header',
@@ -11,14 +12,22 @@ import { HeaderNavItems } from './header-nav-items/header-nav-items';
   styleUrl: './header.scss',
 })
 export class Header {
-  #drawerService = inject(Drawer);
+  // #drawerService = inject(Drawer);
+  protected readonly leftSidebarState = inject(LeftSidebarState);
+  protected readonly breakpoint = inject(Breakpoint);
 
   /**
    * Opens the right-hand drawer and loads the HeaderNavItems component into it.
    * Configures the drawer with a title ("Navigation"), hides the built-in title display,
    * and ensures the overlay is visible.
    */
-  toggleDrawer(): void {
-    this.#drawerService.open(HeaderNavItems, { title: 'Navigation', hideTitle: true, showOverlay: true });
+  // toggleDrawer(): void {
+  //   this.#drawerService.open(HeaderNavItems, { title: 'Navigation', hideTitle: true, showOverlay: true });
+  // }
+
+  // Note: Using the drawer service for mobile "Menu" is great,
+  // but if you want to toggle the actual left-sidebar:
+  toggleSidebar(): void {
+    this.leftSidebarState.toggle();
   }
 }

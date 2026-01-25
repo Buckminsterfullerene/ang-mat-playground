@@ -1,8 +1,9 @@
-import { Component, signal, output } from '@angular/core';
+import { Component, signal, output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { NavItem } from '../interfaces/nav-item-interface';
+import { LeftSidebarState } from './left-sidebar-state';
 
 /**
  * Navigation sidebar located on the left side of the application layout.
@@ -16,17 +17,13 @@ import { NavItem } from '../interfaces/nav-item-interface';
   styleUrls: ['./left-sidebar.scss']
 })
 export class LeftSidebar {
-  /**
-   * Internal visibility state of the sidebar.
-   * `true` represents the expanded view (250px), `false` the collapsed view (60px).
-   */
-  isSidebarOpen = signal(true);
+  protected readonly leftSidebarState = inject(LeftSidebarState);
 
   /**
    * Tracks the label of the currently expanded sub-navigation menu.
    * Only one sub-menu can be open at a time.
    */
-  openSubMenuLabel = signal<string | null>(null);
+  protected readonly openSubMenuLabel = signal<string | null>(null);
 
   /**
    * Signal-based output that notifies the parent layout of width changes.
@@ -85,22 +82,22 @@ export class LeftSidebar {
   /**
    * Toggle the left sidebar open state and emit the corresponding width.
    *
-   * Flips the `isSidebarOpen` signal. When opening, emits the expanded width
+   * Flips the `this.state.isOpen` signal. When opening, emits the expanded width
    * (250). When closing, emits the compact width (60) and clears any open
    * submenu label so submenus collapse with the sidebar.
    *
    * Side effects:
-   * - Mutates signals: `isSidebarOpen`, `openSubMenuLabel`.
+   * - Mutates signals: `this.state.isOpen`, `openSubMenuLabel`.
    * - Emits via: `widthChange.emit(...)`.
    */
   toggleSidebar(): void {
-    this.isSidebarOpen.update(isOpen => {
+    this.leftSidebarState.isOpen.update(isOpen => {
       const newState = !isOpen;
       // Emit the new width using the output's .emit() method
       this.widthChange.emit(newState ? 250 : 60);
       return newState;
     });
-    if (!this.isSidebarOpen()) {
+    if (!this.leftSidebarState.isOpen()) {
       this.openSubMenuLabel.set(null);
     }
   }
@@ -114,7 +111,7 @@ export class LeftSidebar {
    * sidebar and emit the expanded width.
    *
    * Side effects:
-   * - Mutates signals: `openSubMenuLabel`, possibly `isSidebarOpen`.
+   * - Mutates signals: `openSubMenuLabel`, possibly `this.state.isOpen`.
    * - Emits via: `widthChange.emit(250)` when opening a closed sidebar.
    */
   toggleSubMenu(item: NavItem): void {
@@ -125,8 +122,8 @@ export class LeftSidebar {
       this.openSubMenuLabel.set(item.label);
     }
 
-    if (!this.isSidebarOpen()) {
-      this.isSidebarOpen.set(true);
+    if (!this.leftSidebarState.isOpen()) {
+      this.leftSidebarState.isOpen.set(true);
       this.widthChange.emit(250); // Emit open width
     }
   }

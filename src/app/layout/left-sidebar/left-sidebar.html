@@ -1,12 +1,12 @@
 <aside>
-  <nav class="sidebar" [class.close]="!isSidebarOpen()">
+  <nav class="sidebar" [class.close]="!leftSidebarState.isOpen()">
     <ul>
       <li>
-        @if (isSidebarOpen()) {
+        @if (leftSidebarState.isOpen()) {
           <span class="logo">Left Menu</span>
         }
         <!-- Bind click event to the toggle method -->
-        <button (click)="toggleSidebar()" class="toggle-btn" [class.rotate]="!isSidebarOpen()">
+        <button (click)="toggleSidebar()" class="toggle-btn" [class.rotate]="!leftSidebarState.isOpen()">
           <!-- Use Material Icon for the toggle button -->
           <mat-icon aria-hidden="true" class="material-symbols-outlined" fontIcon="keyboard_double_arrow_left"/>
         </button>
@@ -28,7 +28,7 @@
               >
                 <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="item.icon" aria-label="{{ item.label }} icon" />
                 <!-- Show link text if sidebar is open -->
-                @if (isSidebarOpen()) {
+                @if (leftSidebarState.isOpen()) {
                   <span>{{ item.label }}</span>
                 }
               </a>
@@ -37,7 +37,7 @@
               <a [routerLink]="item.link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="item.icon" aria-label="{{ item.label }} icon" />
                 <!-- Show link text if sidebar is open -->
-                @if (isSidebarOpen()) {
+                @if (leftSidebarState.isOpen()) {
                   <span>{{ item.label }}</span>
                 }
               </a>
@@ -51,7 +51,7 @@
               <!-- Main icon for the parent dropdown item -->
               <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="item.icon" aria-label="{{ item.label }} icon" />
               <!-- Show link text if sidebar is open -->
-              @if (isSidebarOpen()) {
+              @if (leftSidebarState.isOpen()) {
                 <span>{{ item.label }}</span>
               }
               <!-- Dropdown arrow icon (rotate handles the arrow direction) -->
@@ -75,7 +75,7 @@
                         <!-- Sub-item icons are optional but good practice -->
                         <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="subItem.icon" aria-label="{{ subItem.label }} icon" />
                         <!-- Show link text if sidebar is open -->
-                        @if (isSidebarOpen()) {
+                        @if (leftSidebarState.isOpen()) {
                           <span>{{ subItem.label }}</span>
                         }
                       </a>
@@ -84,7 +84,7 @@
                         <!-- Sub-item icons are optional but good practice -->
                         <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="subItem.icon" aria-label="{{ subItem.label }} icon" />
                         <!-- Show link text if sidebar is open -->
-                        @if (isSidebarOpen()) {
+                        @if (leftSidebarState.isOpen()) {
                           <span>{{ subItem.label }}</span>
                         }
                       </a>
