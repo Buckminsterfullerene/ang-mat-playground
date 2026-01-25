@@ -63,7 +63,7 @@
     flex: 1 1 auto;
     width: 100%;
     height: 100%; // Needed for proper scrolling behavior
-    transition: width 300ms ease-in-out, padding 300ms ease-in-out;
+    transition: width 500ms ease-in-out, padding 500ms ease-in-out;
     overflow-y: auto;
     overflow-x: hidden;
 
@@ -173,7 +173,7 @@
     .sub-menu {
       display: grid;
       grid-template-rows: 0fr;
-      transition: grid-template-rows 300ms ease-in-out;
+      transition: grid-template-rows 500ms ease-in-out;
 
       > div {
         overflow: hidden;
