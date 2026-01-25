@@ -135,7 +135,13 @@ export class RightSidebarState {
     if (this.#breakpoint.isMobile()) {
       this.width.set(this.#HIDDEN_WIDTH_PX);
     } else {
-      this.width.set(this.#COLLAPSED_WIDTH_PX);
+      // Use collapseMode to determine width when closing
+      const mode = this.collapseMode();
+      this.width.set(
+        mode === SidebarCollapseMode.Hidden
+          ? this.#HIDDEN_WIDTH_PX
+          : this.#COLLAPSED_WIDTH_PX
+      );
     }
   }
 
@@ -157,7 +163,12 @@ export class RightSidebarState {
       if (this.#breakpoint.isMobile()) {
         this.width.set(newState ? this.#EXPANDED_WIDTH_PX : this.#HIDDEN_WIDTH_PX);
       } else {
-        this.width.set(newState ? this.#EXPANDED_WIDTH_PX : this.#COLLAPSED_WIDTH_PX);
+        // Use collapseMode to determine width when toggling
+        const mode = this.collapseMode();
+        const closedWidth = mode === SidebarCollapseMode.Hidden
+          ? this.#HIDDEN_WIDTH_PX
+          : this.#COLLAPSED_WIDTH_PX;
+        this.width.set(newState ? this.#EXPANDED_WIDTH_PX : closedWidth);
       }
       return newState;
     });
