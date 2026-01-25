@@ -44,6 +44,7 @@ export class Layout {
   constructor() {
     effect(() => {
       this.leftSidebarWidth.set(this.leftSidebarState.width());
+      this.rightSidebarWidth.set(this.rightSidebarState.width());
     });
   }
 

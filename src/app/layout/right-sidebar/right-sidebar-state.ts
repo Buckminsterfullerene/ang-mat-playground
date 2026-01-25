@@ -1,5 +1,6 @@
-import { Injectable, signal, Type } from '@angular/core';
+import { inject, Injectable, signal, Type } from '@angular/core';
 import { SidebarCollapseMode } from '../enums/sidebar-enum';
+import { Breakpoint } from '../../services/breakpoint';
 
 export interface RightSidebarConfig<D = any> {
   data?: D;
@@ -14,6 +15,12 @@ export interface RightSidebarConfig<D = any> {
   providedIn: 'root',
 })
 export class RightSidebarState {
+  #breakpoint = inject(Breakpoint);
+
+  readonly #EXPANDED_WIDTH_PX = 250;
+  readonly #COLLAPSED_WIDTH_PX = 60;
+  readonly #HIDDEN_WIDTH_PX = 0;
+
   // Controls if the sidebar container is rendered in the layout
   readonly isVisible = signal(false);
 
@@ -22,6 +29,7 @@ export class RightSidebarState {
    * `true` indicates the sidebar is expanded; `false` indicates it is collapsed/hidden.
    */
   readonly isOpen = signal(false);
+  readonly width = signal<number>(this.#HIDDEN_WIDTH_PX);
 
   /**
    * The visual behavior applied when the sidebar is in its closed state.
@@ -76,6 +84,8 @@ export class RightSidebarState {
    */
   hide(): void {
     this.isVisible.set(false);
+    this.isOpen.set(false);
+    this.width.set(this.#HIDDEN_WIDTH_PX);
     this.#componentToRender.set(null);
     this.#config.set(null);
   }
@@ -96,15 +106,18 @@ export class RightSidebarState {
    * - Sets both {@link isVisible} and {@link isOpen} to `true`
    */
   open(componentType: Type<unknown>, config: RightSidebarConfig = {}): void {
-    this.#componentToRender.set(componentType);
-    this.#config.set(config);
+    if (componentType) {
+      this.#componentToRender.set(componentType);
+      this.#config.set(config);
 
-    if (config.collapseMode !== undefined) {
-      this.collapseMode.set(config.collapseMode);
+      if (config.collapseMode !== undefined) {
+        this.collapseMode.set(config.collapseMode);
+      }
+      this.isVisible.set(true);
     }
 
-    this.isVisible.set(true);
     this.isOpen.set(true);
+    this.width.set(this.#EXPANDED_WIDTH_PX);
   }
 
   /**
@@ -119,6 +132,11 @@ export class RightSidebarState {
    */
   close(): void {
     this.isOpen.set(false);
+    if (this.#breakpoint.isMobile()) {
+      this.width.set(this.#HIDDEN_WIDTH_PX);
+    } else {
+      this.width.set(this.#COLLAPSED_WIDTH_PX);
+    }
   }
 
   /**
@@ -133,19 +151,16 @@ export class RightSidebarState {
    * - Logs a warning when attempting to toggle open without a previously set component.
    */
   toggle(): void {
-    if (this.isOpen()) {
-      this.isOpen.set(false);
-    } else {
-      const existingComponent = this.currentComponent();
-      const existingConfig = this.#config();
+    this.isOpen.update(v => {
+      const newState = !v;
 
-      if(existingComponent && existingConfig) {
-        this.isVisible.set(true);
-        this.isOpen.set(true);
+      if (this.#breakpoint.isMobile()) {
+        this.width.set(newState ? this.#EXPANDED_WIDTH_PX : this.#HIDDEN_WIDTH_PX);
       } else {
-        console.warn('Cannot toggle right sidebar - no component is currently set.');
+        this.width.set(newState ? this.#EXPANDED_WIDTH_PX : this.#COLLAPSED_WIDTH_PX);
       }
-    }
+      return newState;
+    });
   }
 
   /**

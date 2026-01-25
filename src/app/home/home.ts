@@ -34,7 +34,7 @@ export class Home implements OnInit {
 
   toggleSidebar(): void {
     if (!this.#sidebarState.currentComponent()) {
-      const itemsList: string[] = ['Item A', 'Item B', 'Item C', 'Angular v20 is great!'];
+      const itemsList: string[] = Array.from({ length: 100 }, (_, i) => `Item ${i + 1}`);
       const dataPayload: TempExampleData = { items: itemsList };
       this.#sidebarState.open(TempExample, {
         data: dataPayload,

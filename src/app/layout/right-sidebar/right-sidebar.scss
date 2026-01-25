@@ -2,16 +2,75 @@
   :host {
     display: block;
     height: 100%;
-    width: 100%;
     overflow: hidden;
     background-color: var(--mat-sys-surface-container);
+    border-left: 1px solid var(--mat-sys-outline-variant);
+  }
+
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background-color: oklch(from var(--mat-sys-surface-dim) l c h / var(--app-opacity-scrim));
+    z-index: 998;
+    animation: fadeIn 500ms ease;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: var(--app-opacity-hidden);
+    }
+    to {
+      opacity: var(--app-opacity-visible);
+    }
   }
 
   aside {
     height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    @media(min-width: 769px) {
+      position: relative;
+      z-index: 1;
+    }
+
+    @media(max-width: 768px) {
+      position: fixed;
+      inset-block: var(--header-height) 0;
+      inset-inline-end: 0;
+      height: calc(100vh - var(--header-height));
+      height: calc(100vdh - var(--header-height));
+      width: 85%;
+      max-inline-size: 300px;
+      z-index: 999;
+      background-color: var(--mat-sys-surface-container);
+      box-shadow: var(--app-elevation-3);
+      translate: 100% 0;
+      transition: translate 500ms ease;
+
+      &.mobile-open {
+        translate: 0 0;
+      }
+
+      .sidebar {
+        inline-size: 100%;
+        block-size: 100%;
+      }
+    }
+  }
+
+  .sidebar {
+    height: 100%;
     width: 100%;
     display: flex;
     flex-direction: column;
+    transition: width 500ms ease-in-out, padding 500ms ease-in-out;
+    overflow: hidden;
+
+    &.close {
+      padding: 5px;
+      width: 3.75rem;
+    }
   }
 
   .dynamic-content {
@@ -19,12 +78,13 @@
     overflow-y: auto;
     border-top: 1px solid oklch(from var(--mat-sys-outline-variant) l c h / 0.3);
     color: var(--mat-sys-on-surface);
-  }
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: var(--mat-sys-primary) transparent;
 
-  // Media Query Nesting
-  @media(max-width: 800px) {
-    aside {
-      display: none;
+    &::-webkit-scrollbar-thumb {
+      background-color: color-mix(in oklch, var(--mat-sys-primary), transparent 60%);
+      border-radius: 10px;
     }
   }
 }

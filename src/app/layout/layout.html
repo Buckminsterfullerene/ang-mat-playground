@@ -12,10 +12,7 @@
 
   <!-- Right Sidebar Container -->
   <div class="right-sidebar-container">
-    <app-right-sidebar
-      [isSidebarOpen]="rightSidebarState.isOpen()"
-      [collapseMode]="rightSidebarState.collapseMode()"
-      (widthChange)="handleRightSidebarWidthChange($event)"/>
+    <app-right-sidebar/>
   </div>
 </div>
 <drawer-container/>

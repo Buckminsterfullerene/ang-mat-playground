@@ -1,13 +1,19 @@
-<aside>
-  <button (click)="toggleSidebarInternal()" matIconButton [class.rotate]="isSidebarOpen()">
-    <!-- Icon choice reversed from left-sidebar for visual consistency -->
-    <mat-icon aria-hidden="true" class="material-symbols-outlined" fontIcon="keyboard_double_arrow_right"></mat-icon>
-  </button>
+@if (rightSidebarState.isOpen() && breakpoint.isMobile()) {
+  <div class="overlay" (click)="toggleSidebar()"></div>
+}
 
-  <!-- Dynamic content area -->
-  @if (isSidebarOpen()) {
-    <div class="dynamic-content">
-      <ng-container #dynamicContentHost></ng-container>
-    </div>
-  }
+<aside [class.mobile-open]="rightSidebarState.isOpen() && breakpoint.isMobile()">
+  <div class="sidebar" [class.close]="!rightSidebarState.isOpen()">
+    <button (click)="toggleSidebar()" matIconButton>
+      <!-- Icon choice reversed from left-sidebar for visual consistency -->
+      <mat-icon aria-hidden="true" class="material-symbols-outlined" fontIcon="keyboard_double_arrow_right"></mat-icon>
+    </button>
+
+    <!-- Dynamic content area -->
+    @if (rightSidebarState.isOpen()) {
+      <div class="dynamic-content">
+        <ng-container #dynamicContentHost></ng-container>
+      </div>
+    }
+  </div>
 </aside>
