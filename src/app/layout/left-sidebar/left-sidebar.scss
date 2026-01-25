@@ -1,227 +1,232 @@
-:host {
-  display: block;
-  height: 100%;
-  overflow: hidden;
-  background-color: var(--mat-sys-surface-container);
-}
-
-aside {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Use the element selector 'nav' as there is only one in the component template */
-nav {
-  flex: 1 1 auto;
-  width: 100%;
-
-  transition: width 300ms ease-in-out, padding 300ms ease-in-out;
-  overflow-y: auto;
-  overflow-x: hidden;
-
-  /* Prevent 'scrollbar-gutter' from shifting content when it appears */
-  scrollbar-gutter: stable;
-  scrollbar-width: thin;
-  /* Style with OKLCH colors: scrollbar-color: [thumb-color] [track-color] */
-  scrollbar-color: var(--mat-sys-primary) transparent;
-
-  &::-webkit-scrollbar-thumb {
-    /* Uses color-mix for a subtle branded effect */
-    background-color: color-mix(in oklch, var(--mat-sys-primary), transparent 60%);
-    border-radius: 10px;
+@layer components {
+  :host {
+    display: block;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--mat-sys-surface-container);
   }
 
-  &.close {
-    padding: 5px;
-    width: 3.75rem;
-    /* In 'close' mode, hide the scrollbar to keep it clean */
-    scrollbar-width: none;
-    &::-webkit-scrollbar { display: none; }
-  }
-
-  ul {
-    list-style: none;
+  aside {
+    height: 100%;
     display: flex;
     flex-direction: column;
-    padding-inline-start: 0;
-    min-height: min-content;
+  }
 
-    > li:first-child {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 16px;
+  /* Use the element selector 'nav' as there is only one in the component template */
+  nav {
+    flex: 1 1 auto;
+    width: 100%;
 
-      .logo {
-        font-weight: 600;
-        color: var(--mat-sys-on-surface);
-        padding: .85em;
+    transition: width 300ms ease-in-out, padding 300ms ease-in-out;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    /* Prevent 'scrollbar-gutter' from shifting content when it appears */
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    /* Style with OKLCH colors: scrollbar-color: [thumb-color] [track-color] */
+    scrollbar-color: var(--mat-sys-primary) transparent;
+
+    &::-webkit-scrollbar-thumb {
+      /* Uses color-mix for a subtle branded effect */
+      background-color: color-mix(in oklch, var(--mat-sys-primary), transparent 60%);
+      border-radius: 10px;
+    }
+
+    &.close {
+      padding: 5px;
+      width: 3.75rem;
+      /* In 'close' mode, hide the scrollbar to keep it clean */
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
       }
     }
-  }
 
-  & a {
-    align-items: start;
-  }
+    ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      padding-inline-start: 0;
+      min-height: min-content;
 
-  & .dropdown-btn {
-    align-items: center;
-  }
+      > li:first-child {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 16px;
 
-  & a,
-  .dropdown-btn {
-    border-radius: 0.5em;
-    padding: 0.85em;
-    text-decoration: none;
-    color: var(--mat-sys-on-surface-variant);
-    display: flex;
-    align-items: center;
-    gap: 1em;
-    cursor: pointer;
-
-    &:hover {
-      background-color: var(--mat-sys-surface-container-high);
-    }
-  }
-
-  .active {
-    color: var(--mat-sys-primary);
-
-    mat-icon {
-      color: var(--mat-sys-primary);
-    }
-  }
-
-  mat-icon {
-    flex-shrink: 0;
-    color: var(--mat-sys-on-surface-variant);
-    transition: color 150ms ease;
-  }
-
-  & a span,
-  .dropdown-btn span {
-    flex-grow: 1;
-    min-width: 0;
-  }
-
-  .dropdown-btn {
-    width: 100%;
-    text-align: left;
-    background: none;
-    border: none;
-    font: inherit;
-
-    mat-icon:last-child {
-      transition: rotate 200ms ease;
-    }
-
-    &.rotate mat-icon:last-child {
-      rotate: 180deg;
-    }
-  }
-
-  .sub-menu {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows 300ms ease-in-out;
-
-    > div {
-      overflow: hidden;
-    }
-
-    &.show {
-      grid-template-rows: 1fr;
+        .logo {
+          font-weight: 600;
+          color: var(--mat-sys-on-surface);
+          padding: .85em;
+        }
+      }
     }
 
     & a {
-      padding-inline-start: 3em;
+      align-items: start;
     }
-  }
 
-  .sub-item {
-    padding: 1px;
-  }
+    & .dropdown-btn {
+      align-items: center;
+    }
 
-  .toggle-btn {
-    margin-inline-start: auto;
-    padding: 1em;
-    border: none;
-    border-radius: 0.5em;
-    background: none;
-    cursor: pointer;
+    & a,
+    .dropdown-btn {
+      border-radius: 0.5em;
+      padding: 0.85em;
+      text-decoration: none;
+      color: var(--mat-sys-on-surface-variant);
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      cursor: pointer;
 
-    &:hover {
-      background-color: var(--mat-sys-surface-container-high);
+      &:hover {
+        background-color: var(--mat-sys-surface-container-high);
+      }
+    }
+
+    .active {
+      color: var(--mat-sys-primary);
+
+      mat-icon {
+        color: var(--mat-sys-primary);
+      }
     }
 
     mat-icon {
-      transition: rotate 150ms ease;
+      flex-shrink: 0;
+      color: var(--mat-sys-on-surface-variant);
+      transition: color 150ms ease;
     }
 
-    &.rotate mat-icon {
-      rotate: 180deg;
+    & a span,
+    .dropdown-btn span {
+      flex-grow: 1;
+      min-width: 0;
+    }
+
+    .dropdown-btn {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      font: inherit;
+
+      mat-icon:last-child {
+        transition: rotate 200ms ease;
+      }
+
+      &.rotate mat-icon:last-child {
+        rotate: 180deg;
+      }
+    }
+
+    .sub-menu {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 300ms ease-in-out;
+
+      > div {
+        overflow: hidden;
+      }
+
+      &.show {
+        grid-template-rows: 1fr;
+      }
+
+      & a {
+        padding-inline-start: 3em;
+      }
+    }
+
+    .sub-item {
+      padding: 1px;
+    }
+
+    .toggle-btn {
+      margin-inline-start: auto;
+      padding: 1em;
+      border: none;
+      border-radius: 0.5em;
+      background: none;
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--mat-sys-surface-container-high);
+      }
+
+      mat-icon {
+        transition: rotate 150ms ease;
+      }
+
+      &.rotate mat-icon {
+        rotate: 180deg;
+      }
     }
   }
-}
 
-// Media Query Nesting
-@media(max-width: 800px) {
-  nav {
-    height: 60px;
-    width: 100%;
-    border-right: none;
-    padding: 0;
-    position: fixed;
-    inset-block-end: 0;
-
-    > ul {
+  // Media Query Nesting
+  @media(max-width: 800px) {
+    nav {
+      height: 60px;
+      width: 100%;
+      border-right: none;
       padding: 0;
-      display: grid;
-      grid-auto-columns: 60px;
-      grid-auto-flow: column;
-      align-items: center;
-      overflow-x: scroll;
-      overflow-y: hidden;
-    }
+      position: fixed;
+      inset-block-end: 0;
 
-    ul li {
-      height: 100%;
-
-      & a, .dropdown-btn {
-        width: 60px;
-        height: 60px;
+      > ul {
         padding: 0;
-        border-radius: 0;
-        justify-content: center;
+        display: grid;
+        grid-auto-columns: 60px;
+        grid-auto-flow: column;
+        align-items: center;
+        overflow-x: scroll;
+        overflow-y: hidden;
       }
 
-      span, &:first-child, .dropdown-btn svg:last-child {
-        display: none;
-      }
+      ul li {
+        height: 100%;
 
-      .sub-menu.show {
-        position: fixed;
-        inset-inline-start: 0;
-        inset-block-end: 60px;
-        box-sizing: border-box;
-        height: 60px;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-
-        > div {
-          overflow-x: auto;
-        }
-
-        li {
-          display: inline-flex;
-        }
-
-        a {
-          box-sizing: border-box;
-          padding: 1em;
-          width: auto;
+        & a, .dropdown-btn {
+          width: 60px;
+          height: 60px;
+          padding: 0;
+          border-radius: 0;
           justify-content: center;
+        }
+
+        span, &:first-child, .dropdown-btn svg:last-child {
+          display: none;
+        }
+
+        .sub-menu.show {
+          position: fixed;
+          inset-inline-start: 0;
+          inset-block-end: 60px;
+          box-sizing: border-box;
+          height: 60px;
+          width: 100%;
+          display: flex;
+          justify-content: center;
+
+          > div {
+            overflow-x: auto;
+          }
+
+          li {
+            display: inline-flex;
+          }
+
+          a {
+            box-sizing: border-box;
+            padding: 1em;
+            width: auto;
+            justify-content: center;
+          }
         }
       }
     }

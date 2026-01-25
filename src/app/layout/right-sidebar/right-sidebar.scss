@@ -1,28 +1,30 @@
-:host {
-  display: block;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-  background-color: var(--mat-sys-surface-container);
-}
+@layer components {
+  :host {
+    display: block;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background-color: var(--mat-sys-surface-container);
+  }
 
-aside {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.dynamic-content {
-  flex: 1;
-  overflow-y: auto;
-  border-top: 1px solid oklch(from var(--mat-sys-outline-variant) l c h / 0.3);
-  color: var(--mat-sys-on-surface);
-}
-
-// Media Query Nesting
-@media(max-width: 800px) {
   aside {
-    display: none;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dynamic-content {
+    flex: 1;
+    overflow-y: auto;
+    border-top: 1px solid oklch(from var(--mat-sys-outline-variant) l c h / 0.3);
+    color: var(--mat-sys-on-surface);
+  }
+
+  // Media Query Nesting
+  @media(max-width: 800px) {
+    aside {
+      display: none;
+    }
   }
 }
