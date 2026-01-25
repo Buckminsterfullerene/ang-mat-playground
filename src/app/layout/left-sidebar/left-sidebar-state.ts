@@ -11,19 +11,30 @@ export class LeftSidebarState {
   readonly isOpen = signal(true);
   readonly width = signal(250); // in pixels
 
-  // Derived state: If mobile, the sidebar is effectively "closed" in the grid
-  // regardless of the toggle value, as it moves to a Drawer/Overlay.
-  readonly isCollapsed = computed(() => !this.isOpen() || this.#breakpoint.isMobile());
-
   toggle(): void {
     this.isOpen.update(v => {
       const newState = !v;
-      this.width.set(newState ? 250 : 60);
+
+      if (this.#breakpoint.isMobile()) {
+        // On mobile, sidebar is either fully open (250px) or fully closed (0px)
+        this.width.set(newState ? 250 : 0);
+      // this.width.set(newState ? 250 : 60);
+      }
       return newState;
     });
   }
 
   close(): void {
     this.isOpen.set(false);
+    if (this.#breakpoint.isMobile()) {
+      this.width.set(0);
+    }
+  }
+
+  open(): void {
+    this.isOpen.set(true);
+    if (!this.#breakpoint.isMobile()) {
+      this.width.set(250);
+    }
   }
 }

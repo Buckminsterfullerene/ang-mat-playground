@@ -1,8 +1,13 @@
-<aside>
+<!-- Mobile Overlay backdrop -->
+@if (leftSidebarState.isOpen() && breakpoint.isMobile()) {
+  <div class="overlay" (click)="toggleSidebar()"></div>
+}
+
+<aside [class.mobile-open]="leftSidebarState.isOpen() && breakpoint.isMobile()">
   <nav class="sidebar" [class.close]="!leftSidebarState.isOpen()">
     <ul>
       <li>
-        @if (leftSidebarState.isOpen()) {
+        @if (leftSidebarState.isOpen() && !breakpoint.isMobile()) {
           <span class="logo">Left Menu</span>
         }
         <!-- Bind click event to the toggle method -->

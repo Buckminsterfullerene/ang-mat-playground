@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { NavItem } from '../interfaces/nav-item-interface';
 import { LeftSidebarState } from './left-sidebar-state';
+import { Breakpoint } from '../../services/breakpoint';
 
 /**
  * Navigation sidebar located on the left side of the application layout.
@@ -18,6 +19,7 @@ import { LeftSidebarState } from './left-sidebar-state';
 })
 export class LeftSidebar {
   protected readonly leftSidebarState = inject(LeftSidebarState);
+  protected readonly breakpoint = inject(Breakpoint);
 
   /**
    * Tracks the label of the currently expanded sub-navigation menu.
@@ -89,6 +91,23 @@ export class LeftSidebar {
     if (!this.leftSidebarState.isOpen()) {
       this.openSubMenuLabel.set(null);
     }
+  }
+
+  /**
+   * Close the sidebar (used on mobile when clicking overlay or links).
+   */
+  closeSidebar(): void {
+    if (this.breakpoint.isMobile()) {
+      this.leftSidebarState.close();
+      this.openSubMenuLabel.set(null);
+    }
+  }
+
+  /**
+   * Handle link clicks within the sidebar - close the sidebar on mobile.
+   */
+  onLinkClick(): void {
+    this.closeSidebar();
   }
 
   /**
