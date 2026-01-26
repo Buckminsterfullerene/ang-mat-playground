@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NavItem } from '../interfaces/nav-item-interface';
 import { LeftSidebarState } from './left-sidebar-state';
 import { Breakpoint } from '../../services/breakpoint';
+import { MatButtonModule } from '@angular/material/button';
 
 /**
  * Navigation sidebar located on the left side of the application layout.
@@ -13,7 +14,12 @@ import { Breakpoint } from '../../services/breakpoint';
  */
 @Component({
   selector: 'app-left-sidebar',
-  imports: [CommonModule, RouterModule, MatIconModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatIconModule,
+    MatButtonModule
+  ],
   templateUrl: './left-sidebar.html',
   styleUrls: ['./left-sidebar.scss']
 })

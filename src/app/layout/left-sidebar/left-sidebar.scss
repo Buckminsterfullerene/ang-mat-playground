@@ -16,6 +16,9 @@
     animation: fadeIn 300ms ease;
   }
 
+  // Animation controls the mobile overlay backdrop's appearance
+  // Defines a CSS animation named "fadeIn" that gradually changes the opacity of an element from a hidden state to a visible state.
+  // Used by the .overlay class to create a fade-in effect when the overlay appears.
   @keyframes fadeIn {
     from {
       opacity: var(--app-opacity-hidden);
@@ -44,6 +47,8 @@
       z-index: 999;
       background-color: var(--mat-sys-surface-container);
       box-shadow: var(--app-elevation-3);
+
+      // Control the mobile sidebar's slide-in/slide-out animation
       translate: -100% 0;
       transition: translate 300ms ease;
 
@@ -58,14 +63,16 @@
     }
   }
 
-  /* Use the element selector 'nav' as there is only one in the component template */
   nav {
     flex: 1 1 auto;
     width: 100%;
     height: 100%; // Needed for proper scrolling behavior
+
+    // Creates smooth animations when the sidebar toggles between open and closed states
     transition: width 500ms ease-in-out, padding 500ms ease-in-out;
     overflow-y: auto;
     overflow-x: hidden;
+    padding: 5px;
 
     /* Prevent 'scrollbar-gutter' from shifting content when it appears */
     scrollbar-gutter: stable;
@@ -80,7 +87,6 @@
     }
 
     &.close {
-      padding: 5px;
       width: 3.75rem;
       /* In 'close' mode, hide the scrollbar to keep it clean */
       scrollbar-width: none;
@@ -94,11 +100,16 @@
       display: flex;
       justify-content: flex-end;
       margin-bottom: 16px;
+      align-items: flex-start;
 
       .logo {
         font-weight: 600;
         color: var(--mat-sys-on-surface);
         padding: .85em;
+      }
+
+      button {
+        flex-shrink: 0;
       }
     }
 
@@ -108,7 +119,6 @@
       flex-direction: column;
       padding-inline-start: 0;
       min-height: min-content;
-
     }
 
     & a {
@@ -191,27 +201,6 @@
 
     .sub-item {
       padding: 1px;
-    }
-
-    .toggle-btn {
-      margin-inline-start: auto;
-      padding: 1em;
-      border: none;
-      border-radius: 0.5em;
-      background: none;
-      cursor: pointer;
-
-      &:hover {
-        background-color: var(--mat-sys-surface-container-high);
-      }
-
-      mat-icon {
-        transition: rotate 150ms ease;
-      }
-
-      &.rotate mat-icon {
-        rotate: 180deg;
-      }
     }
   }
 

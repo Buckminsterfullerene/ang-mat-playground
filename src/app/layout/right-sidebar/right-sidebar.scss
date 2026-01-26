@@ -15,6 +15,9 @@
     animation: fadeIn 500ms ease;
   }
 
+  // Animation controls the mobile overlay backdrop's appearance
+  // Defines a CSS animation named "fadeIn" that gradually changes the opacity of an element from a hidden state to a visible state.
+  // Used by the .overlay class to create a fade-in effect when the overlay appears.
   @keyframes fadeIn {
     from {
       opacity: var(--app-opacity-hidden);
@@ -70,6 +73,24 @@
     &.close {
       padding: 5px;
       width: 3.75rem;
+    }
+
+    button {
+      padding: 1em;
+      border: none;
+      border-radius: 0.5em;
+      background: none;
+      cursor: pointer;
+      flex-shrink: 0;
+      align-self: flex-start;
+
+      &:hover {
+        background-color: var(--mat-sys-surface-container-high);
+      }
+
+      mat-icon {
+        transition: rotate 150ms ease;
+      }
     }
   }
 
