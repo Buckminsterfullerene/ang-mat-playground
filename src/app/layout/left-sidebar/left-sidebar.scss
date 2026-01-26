@@ -72,7 +72,6 @@
     transition: width 500ms ease-in-out, padding 500ms ease-in-out;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 5px;
 
     /* Prevent 'scrollbar-gutter' from shifting content when it appears */
     scrollbar-gutter: stable;
@@ -90,6 +89,7 @@
       width: 3.75rem;
       /* In 'close' mode, hide the scrollbar to keep it clean */
       scrollbar-width: none;
+      padding-inline-start: 5px;
 
       &::-webkit-scrollbar {
         display: none;

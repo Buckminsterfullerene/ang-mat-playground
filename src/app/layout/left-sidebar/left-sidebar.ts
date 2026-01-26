@@ -129,16 +129,9 @@ export class LeftSidebar {
    * - Emits via: `widthChange.emit(250)` when opening a closed sidebar.
    */
   toggleSubMenu(item: NavItem): void {
-    const currentLabel = this.openSubMenuLabel();
-    if (currentLabel === item.label) {
-      this.openSubMenuLabel.set(null);
-    } else {
-      this.openSubMenuLabel.set(item.label);
-    }
+    this.openSubMenuLabel.update(current => current === item.label ? null : item.label);
 
-    if (!this.leftSidebarState.isOpen()) {
-      this.leftSidebarState.isOpen.set(true);
-    }
+    this.leftSidebarState.openExpanded();
   }
 
   /**
