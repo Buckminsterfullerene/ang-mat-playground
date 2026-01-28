@@ -12,7 +12,7 @@
       <!-- Bind click event to the toggle method -->
       <button (click)="toggleSidebar()" matIconButton>
         <!-- Use Material Icon for the toggle button -->
-        <mat-icon aria-hidden="true" class="material-symbols-outlined" fontIcon="keyboard_double_arrow_left"/>
+        <mat-icon aria-hidden="true" fontIcon="keyboard_double_arrow_left"/>
       </button>
     </div>
 
@@ -31,7 +31,7 @@
                 rel="noopener noreferrer"
                 class="external-link"
               >
-                <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="item.icon"
+                <mat-icon aria-hidden="true" [fontIcon]="item.icon"
                           aria-label="{{ item.label }} icon"/>
                 <!-- Show link text if sidebar is open -->
                 @if (leftSidebarState.isOpen()) {
@@ -41,7 +41,7 @@
             } @else {
               <!-- Internal Link: use routerLink directive -->
               <a [routerLink]="item.link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-                <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="item.icon"
+                <mat-icon aria-hidden="true" [fontIcon]="item.icon"
                           aria-label="{{ item.label }} icon"/>
                 <!-- Show link text if sidebar is open -->
                 @if (leftSidebarState.isOpen()) {
@@ -56,14 +56,14 @@
             <!-- Dropdown button to toggle sub-menu -->
             <button (click)="toggleSubMenu(item)" class="dropdown-btn" [class.rotate]="isSubMenuOpen(item.label)">
               <!-- Main icon for the parent dropdown item -->
-              <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="item.icon"
+              <mat-icon aria-hidden="true" [fontIcon]="item.icon"
                         aria-label="{{ item.label }} icon"/>
               <!-- Show link text if sidebar is open -->
               @if (leftSidebarState.isOpen()) {
                 <span>{{ item.label }}</span>
               }
               <!-- Dropdown arrow icon (rotate handles the arrow direction) -->
-              <mat-icon aria-hidden="true" class="material-symbols-outlined" fontIcon="keyboard_arrow_down"
+              <mat-icon aria-hidden="true" fontIcon="keyboard_arrow_down"
                         aria-label="Toggle Submenu"></mat-icon>
             </button>
 
@@ -82,7 +82,7 @@
                         class="external-link"
                       >
                         <!-- Sub-item icons are optional but good practice -->
-                        <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="subItem.icon"
+                        <mat-icon aria-hidden="true" [fontIcon]="subItem.icon"
                                   aria-label="{{ subItem.label }} icon"/>
                         <!-- Show link text if sidebar is open -->
                         @if (leftSidebarState.isOpen()) {
@@ -93,7 +93,7 @@
                       <a [routerLink]="subItem.link" routerLinkActive="active"
                          [routerLinkActiveOptions]="{ exact: true }">
                         <!-- Sub-item icons are optional but good practice -->
-                        <mat-icon aria-hidden="true" class="material-symbols-outlined" [fontIcon]="subItem.icon"
+                        <mat-icon aria-hidden="true" [fontIcon]="subItem.icon"
                                   aria-label="{{ subItem.label }} icon"/>
                         <!-- Show link text if sidebar is open -->
                         @if (leftSidebarState.isOpen()) {
